@@ -1,0 +1,57 @@
+{% extends 'base.html' %} {% block title %}Datasets - CaptchaBreaker{% endblock %} {%block main %}
+
+
+
+<div class="content">
+    <h2>Datasets page</h2>
+    <form>
+        <div class="form-group">
+            <label for="file-input">ZIP containing captchas</label>
+            <input type="file" class="form-control-file" id="file-input" accept="application/zip">
+        </div>
+
+        <div id="wrapper-labeling">
+            <div class="row">
+
+
+            <div class="col-sm-12 text-center">
+                Manually label images?<br />
+                <a id="btn-create-labels" class="btn btn-primary btn-md center-block" onClick="labelingStart()">Yes</a>
+                <a id="btn-skip-labels" class="btn btn-secondary btn-md center-block" onClick="labelingCancel()">No</a>
+            </div>
+            </div>
+
+            <div class="row" id="wrapper-labeling-input">
+                <div class="col-sm-12 text-center">
+                    <img id="img-captcha-label" src="" /> <br />
+                    <a id="btn-create-labels" class="btn btn-secondary btn-md center-block" onClick="labelingImagePrev()">Prev</a>
+                    <input type="text" id="text-captcha" />
+                    <a id="btn-skip-labels" class="btn btn-primary btn-md center-block" onClick="labelingImageNext()">Next</a>
+                </div>
+
+            </div>
+
+        </div>
+
+        <select class="form-control" id="file-select"> </select>
+
+
+        <button type="submit" class="btn btn-primary mb-2">Submit</button>
+        <img id="file-img" />
+    </form>
+
+    <div id="file-list">
+
+    </div>
+</div>
+
+{% endblock %} {% block custom_js %}
+
+<script type="text/javascript" src="/static/js/zip.js"></script>
+<script type="text/javascript" src="/static/js/datasets_new.js"></script>
+
+<script type="text/javascript">
+    zip.workerScriptsPath = "/static/js/";
+</script>
+
+{% endblock %}
