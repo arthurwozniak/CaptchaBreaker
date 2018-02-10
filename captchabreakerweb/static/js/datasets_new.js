@@ -43,7 +43,7 @@ function prepareQuery(initOperation) {
         data[operations[i]] = {};
     }
     // TODO: fix logic if we are behind this operation
-    if (! $("#checkbox-filter-range").is(":checked")){
+    if (!$("#checkbox-filter-range").is(":checked")) {
         delete data["filter"];
     } else {
         delete data["treshold"];
@@ -65,33 +65,58 @@ function postImage(encoded) {
     console.log("query: ", query);
     $.ajax({
         type: "POST",
-        url: "/foo",
+        url: "./preview",
         data: JSON.stringify(query),
         dataType: 'html',
         contentType: 'application/json;charset=UTF-8',
-        success: function (result){
+        success: function(result) {
             result = JSON.parse(result);
-            for (var i in operations){
-                console.log("hiding: " + "#wrapper-img-"+i)
-                $("#wrapper-img-"+operations[i]).prop("hidden", true);
+            for (var i in operations) {
+                console.log("hiding: " + "#wrapper-img-" + i)
+                $("#wrapper-img-" + operations[i]).prop("hidden", true);
             }
-            for (var i in result){
+            for (var i in result) {
                 console.log(i);
-                $("#img-"+i).attr("src", "data:image/png;base64,"+result[i])
-                $("#wrapper-img-"+i).prop("hidden", false);
+                $("#img-" + i).attr("src", "data:image/png;base64," + result[i])
+                $("#wrapper-img-" + i).prop("hidden", false);
             }
         }
     });
 }
 
+function submit() {
+    var r = new FileReader();
+    r.addEventListener("load", function() {
+        var query = {
+            file: r.result.substr(28),
+            operations: prepareQuery()
+        };
+        if (labels){
+            query['labels'] = labels
+        }
+        console.log("query: ", query);
+        $.ajax({
+            type: "POST",
+            url: "./upload",
+            data: JSON.stringify(query),
+            dataType: 'html',
+            contentType: 'application/json;charset=UTF-8',
+            success: function(result) {
+                result = JSON.parse(result);
+                console.log(result);
+            }
+        });
+    }, false);
+    r.readAsDataURL(fileInput.prop("files")[0]);
+}
+
 
 function showFilterRange() {
     console.log("Filter checkbox clicked")
-    if ($("#checkbox-filter-range").is(":checked")){
+    if ($("#checkbox-filter-range").is(":checked")) {
         $("#step-3-filter-range").prop("hidden", false);
 
-    }
-    else {
+    } else {
         $("#step-3-filter-range").prop("hidden", true);
     }
     fileSelectChanged();
@@ -217,9 +242,9 @@ fileInput.bind('change', function() {
     }
 
     // show selected file and disable btn
-    $("#lbl-"+fileInput.prop("id")).text(fileInput.val());
-    $("#btn-"+fileInput.prop("id")).toggleClass( "btn-primary", false );
-    $("#btn-"+fileInput.prop("id")).toggleClass( "btn-success", true );
+    $("#lbl-" + fileInput.prop("id")).text(files["name"]);
+    $("#btn-" + fileInput.prop("id")).toggleClass("btn-primary", false);
+    $("#btn-" + fileInput.prop("id")).toggleClass("btn-success", true);
     fileInput.prop("disabled", true);
 
     // read images from archive
@@ -303,7 +328,7 @@ function labelingStart() {
 function labelingImageForCurrentPos() {
     $("#lbl-labeling-current").text(labelsPos + 1);
     // Error, image out of range
-    if (! ((0 <= labelsPos) && (labelsPos < labelsTotal))){
+    if (!((0 <= labelsPos) && (labelsPos < labelsTotal))) {
         return
     }
     model.getBlobFromEntry(Object.values(archiveEntries)[labelsPos],
@@ -317,7 +342,7 @@ function labelingImageForCurrentPos() {
 
 function labelingImageNext() {
     console.log("next image");
-    if (labelsPos >= (labelsTotal)){
+    if (labelsPos >= (labelsTotal)) {
         console.log("end of labeling...")
         return
     }
@@ -338,7 +363,7 @@ function labelingImageNext() {
 function labelingImagePrev() {
     console.log("prev image");
 
-    if (labelsPos === 0){
+    if (labelsPos === 0) {
         console.log("cant go back...")
         return;
     }

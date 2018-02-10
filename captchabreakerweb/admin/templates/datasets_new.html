@@ -1,0 +1,154 @@
+{% extends 'base.html' %} {% block title %}Datasets - CaptchaBreaker{% endblock %} {%block main %}
+
+<style>
+    img {
+        width: 100%;
+    }
+</style>
+
+<div class="content">
+    <h1>New dataset</h1>
+
+    <div id="step-1">
+
+        <h2>Select archive</h2>
+        <div class="form-group text-center">
+
+            <label class="btn btn-primary" id="btn-file-input">
+            Browse <input type="file" hidden id="file-input" accept="application/zip" />
+        </label>
+            <label id="lbl-file-input"></label>
+        </div>
+
+
+    </div>
+
+    <div id="step-2" hidden>
+        <h2>Label CAPTCHAs</h2>
+        <div class="row">
+
+
+            <div class="col-md-12 text-center">
+                <label class="col-form-label">Manually label images?</label><br />
+                <label id="btn-create-labels" class="btn btn-primary btn-md col-md-4" onClick="labelingStart()">Yes</label>
+                <label id="btn-skip-labels" class="btn btn-danger btn-md col-md-4" onClick="labelingCancel()">Skip</label>
+            </div>
+        </div>
+
+        <div class="row form-group" id="step-2-labeling" hidden>
+            <div class="col-md-12 text-center">
+
+
+                <img id="img-captcha-label" class="col-md-8" src="" /> <br />
+                <label id="lbl-labeling-current"></label>/<label id="lbl-labeling-total"></label> <br />
+                <label id="btn-labeling-prev" class="btn btn-primary btn-md col-md-2" onClick="labelingImagePrev()">Prev</label>
+                <input type="text" id="text-captcha" class="col-md-4" />
+                <label id="btn-labeling-next" class="btn btn-primary btn-md col-md-2" onClick="labelingImageNext()">Next</label><br />
+                <label id="btn-labeling-done" class="btn btn-success btn-md col-md-8" hidden onClick="labelingDone()">Done</label>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div id="step-3" hidden>
+
+
+        <h2>Character extraction</h2>
+        <div class="col-md-10">
+
+
+            <div class="form-group row">
+                <label for="file-select" class="col-md-2 col-form-label">Example image</label>
+                <select class="form-control col-md-10" id="file-select"> </select>
+
+            </div>
+
+            <div class="form-check form-group">
+                <input type="checkbox" value="" id="checkbox-filter-range" onchange="showFilterRange()" />
+                <label for="checkbox-filter-range" class="col-form-label">Filter color range (Instead of Otsu's method)</label>
+
+            </div>
+
+            <div class="form-group row" id="step-3-filter-range" hidden>
+                <label for="filter-range-lower" class="col-md-2 col-form-label">Lower bound</label>
+                <input type="number" class="form-control col-md-4" id="filter-range-lower" min="0" max="255" value="0" onchange="filterChangedLower()">
+
+                <label for="filter-range-upper" class="col-md-2 col-form-label">Upper bound</label>
+                <input type="number" class="form-control col-md-4" id="filter-range-upper" min="0" max="255" value="255" onchange="filterChangedUpper()">
+            </div>
+
+            <div class="form-group row">
+                <label for="characters-count" class="col-md-2 col-form-label">Characters in captcha</label>
+                <input type="number" class="form-control col-md-10" id="characters-count" min="1" max="10" value="5" onchange="charactersCountChanged()">
+            </div>
+
+
+            <div class="row">
+
+
+                <div class="col-md-6" id="wrapper-img-original"><img src="http://placehold.it/300x100" id="img-original" />Original</div>
+                <div class="col-md-6" id="wrapper-img-grayscale"><img src="http://placehold.it/300x100" id="img-grayscale" />Grayscale</div>
+                <div class="col-md-6" id="wrapper-img-treshold"><img src="http://placehold.it/300x100" id="img-treshold" />Treshold</div>
+                <div class="col-md-6" id="wrapper-img-filter"><img src="http://placehold.it/300x100" id="img-filter" />Filter</div>
+                <div class="col-md-6" id="wrapper-img-unmask"><img src="http://placehold.it/300x100" id="img-unmask" />Unmask</div>
+            </div>
+
+        </div>
+
+        <label id="btn-submit" class="btn btn-primary btn-md col-md-4" onClick="submit()">Submit</label><br />
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-4">
+            <h3>Available operations</h3><br>
+
+            <ul id="operationListAvailable" class="list-group">
+                {% for operation in operations %}
+                <li class="list-group-item">{{operation.name}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-md-4">
+            <h3>Selected operations</h3><br>
+
+            <ul id="operationListSelected" class="list-group">
+                <li class="list-group-item">Empty</li>
+            </ul>
+        </div>
+    </div>
+
+
+</div>
+
+<!-- Latest Sortable -->
+<script src="http://rubaxa.github.io/Sortable/Sortable.js"></script>
+
+
+<script>
+    Sortable.create(operationListAvailable,
+                    { group: { pull: 'clone',
+                               put: false,
+                               name: 'operations' }});
+    Sortable.create(operationListSelected,
+                    { group: { pull: false,
+                               put: true,
+                               name: 'operations' },
+                     onAdd: function (evt){ console.log('onAdd.foo:', [evt.item, evt.from])}
+                    }
+                    );
+</script>
+
+{% endblock %} {% block custom_js %}
+
+<script type="text/javascript" src="/static/js/zip.js"></script>
+<script type="text/javascript" src="/static/js/datasets_new.js"></script>
+
+<script type="text/javascript">
+    zip.workerScriptsPath = "/static/js/";
+</script>
+
+
+
+{% endblock %}

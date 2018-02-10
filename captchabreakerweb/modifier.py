@@ -28,6 +28,20 @@ def intersection(a, b):
     return (x, y, w, h)
 
 
+def get_letters(image, boxes):
+    image = image.copy()
+    # Z původního obrázku vyřežeme jednotlivé číslice
+    letters = []
+    for i in boxes:
+        x, y, w, h = i
+        #cv2.rectangle(im2, (x, y), (x + w, y + h), (0, 255, 0), 1)
+        letters.append([x, cv2.resize(image[y:y + h, x:x + w], (20, 20))])
+    # Číslice seřadíme podle osy X
+    letters.sort()
+
+    return letters
+
+
 def get_contours(image):
     # Najdeme obdélníky ohraničující spojité plochy v obrázku
     im2, contours, hierarchy = cv2.findContours(
@@ -71,6 +85,12 @@ def blob_to_img(data):
     return img
 
 
+def bin_to_img(data):
+    nparr = np.fromstring(data, np.uint8)
+    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+    return img
+
+
 def img_grayscale(image):
     image = image.copy()
     grayscaled = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
@@ -108,7 +128,9 @@ def img_unmask(image, count):
         boxes = contours_to_boxes(contours)
 
     # Zakreslíme ohraničující čtverce
-    image_bordered = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
+    image_bordered = cv2.cvtColor(image.copy(), cv2.COLOR_GRAY2RGB)
+
+    letters = get_letters(image, boxes)
 
     rects = []
 
@@ -117,7 +139,7 @@ def img_unmask(image, count):
         rects.append([x,y,w,h])
         cv2.rectangle(image_bordered,(x,y),(x+w,y+h),(0,255,0),1)
 
-    return image_bordered
+    return (image_bordered, letters)
 
 
 def img_to_base64(image):
