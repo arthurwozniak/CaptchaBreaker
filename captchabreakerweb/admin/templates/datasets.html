@@ -7,9 +7,25 @@
 
 
 <div class="content">
-    <h2 class="content-subhead">Datasets page</h2>
 
-    <a class="btn btn-primary" href="/admin/datasets/new">New dataset</a>
+    <div class="row">
+        <div class="col-md-9">
+            <h2 class="content-subhead">Datasets page</h2>
+        </div>
+        <div class="col-md-3">
+            <a class="btn btn-primary btn-block float-right" href="/admin/datasets/new">New dataset</a>
+        </div>
+    </div>
+    <hr>
+
+    <div class="col">
+    {% for i in datasets %}
+    <div class="row">
+        <a href="./{{i.id}}/">{{i.name}}</a> &nbsp;[{{i.created_at}}]
+    </div>
+    {% endfor %}
+
+    </div>
 
 
 </div>

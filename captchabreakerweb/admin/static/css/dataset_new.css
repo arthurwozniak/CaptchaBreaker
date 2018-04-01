@@ -1,0 +1,11 @@
+#operationListSelected {
+min-height: 100px;
+
+}
+
+#operationListSelected i{
+		color: #ff0000;
+		top: 10px;
+		right: 10px;
+		position: absolute;
+}

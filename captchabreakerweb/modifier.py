@@ -35,10 +35,11 @@ def get_letters(image, boxes):
     for i in boxes:
         x, y, w, h = i
         #cv2.rectangle(im2, (x, y), (x + w, y + h), (0, 255, 0), 1)
-        letters.append([x, cv2.resize(image[y:y + h, x:x + w], (20, 20))])
+        letters.append([x, cv2.resize(src=image[y:y + h, x:x + w], dsize=(20, 20), interpolation=cv2.INTER_NEAREST)])
     # Číslice seřadíme podle osy X
     letters.sort()
 
+    letters = list(map(lambda x: x[1], letters))
     return letters
 
 
@@ -48,7 +49,7 @@ def get_contours(image):
         image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     # Odstraníme malé plochy představující šum nebo "kousky" číslic
-    contours_filtered = [c for c in contours if cv2.contourArea(c) >= 50]
+    contours_filtered = [c for c in contours if cv2.contourArea(c) >= 20]
 
     #print("Počet ploch: %d" % len(contours_filtered))
     return contours_filtered
@@ -63,6 +64,7 @@ def contours_to_boxes(contours):
 
 def remove_overlapping_boxes(boxes, count):
     print("removing")
+    #         boxes.append([x, y, w, h])
     while (len(boxes) > count):
         #print(boxes)
         areas = [intersection(boxes[i], boxes[i+1]) for i in range(len(boxes)-1)]
@@ -111,11 +113,12 @@ def img_filter(image, lower=0, upper=0):
     return filtered
 
 
-def img_unmask(image, count):
+def img_unmask(image, count, onlyLetters = False):
     image = image.copy()
     contours = get_contours(image.copy())
     boxes = contours_to_boxes(contours)
-    print("boxes count ", count)
+    print("captcha letters: ", count)
+    print("boxes found: ", len(boxes))
 
     if len(boxes) > count:
         boxes = remove_overlapping_boxes(boxes, count)
@@ -129,7 +132,6 @@ def img_unmask(image, count):
 
     # Zakreslíme ohraničující čtverce
     image_bordered = cv2.cvtColor(image.copy(), cv2.COLOR_GRAY2RGB)
-
     letters = get_letters(image, boxes)
 
     rects = []
@@ -139,7 +141,9 @@ def img_unmask(image, count):
         rects.append([x,y,w,h])
         cv2.rectangle(image_bordered,(x,y),(x+w,y+h),(0,255,0),1)
 
-    return (image_bordered, letters)
+    if onlyLetters:
+        return letters
+    return image_bordered
 
 
 def img_to_base64(image):

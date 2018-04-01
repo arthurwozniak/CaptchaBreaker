@@ -1,5 +1,5 @@
 from .AbstractParserOperation import AbstractParserOperation
-
+import cv2
 
 class TresholdOtsu(AbstractParserOperation):
 
@@ -7,3 +7,9 @@ class TresholdOtsu(AbstractParserOperation):
     
     def __init__(self):
         super(TresholdOtsu, self).__init__()
+
+    def apply(self, image):
+        image = image.copy()
+        tresholded = cv2.threshold(
+            image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+        return tresholded
