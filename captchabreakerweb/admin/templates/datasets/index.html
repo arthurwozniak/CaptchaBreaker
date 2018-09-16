@@ -19,11 +19,11 @@
     <hr>
 
     <div class="col">
-    {% for i in datasets %}
-    <div class="row">
-        <a href="./{{i.id}}/">{{i.name}}</a> &nbsp;[{{i.created_at}}]
-    </div>
-    {% endfor %}
+        {% for i in datasets %}
+        <div class="row">
+            <a href="./{{i.id}}/">{{i.name}}</a> &nbsp;[{{i.created_at}}]
+        </div>
+        {% endfor %}
 
     </div>
 

@@ -92,7 +92,7 @@
                     <ul id="operationListAvailable" class="list-group">
                         {% for operation in operations %}
                         <li class="list-group-item" data-class="{{operation.__class__.__name__}}">{{operation.name}}
-                            <div class="details" hidden="true">
+                            <div class="details" hidden>
                                 {{operation.desc}} <i class="js-remove">✖</i><br>
                                 {{operation.arg_html() | safe}}
                             </div>
