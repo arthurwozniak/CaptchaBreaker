@@ -1,0 +1,41 @@
+{% extends 'common/base.html' %}
+
+{% block body %}
+
+<main role="main" class="col-md-8 offset-md-2 col-sm-10 offset-sm-1">
+
+    <div id="upload-form" class="row" method="post" action="{{url_for('decode')}}">
+
+        {% include 'home/_image_selector.html' %}
+        {% include 'home/_classificators.html' %}
+        <div class="col-md-12 mt-2 text-center">
+            <label id="btn-submit" class="btn btn-primary disabled" onClick=submit()>Submit</label><br />
+        </div>
+    </div>
+
+
+    <div id="spinner" class="spinner">
+        <div class="double-bounce1"></div>
+        <div class="double-bounce2"></div>
+    </div>
+    <div id="notification-success" class="alert alert-success">
+        Recognized code is <span id="decoded-text">0000</span>.
+    </div>
+
+    <div id="notification-error" class="alert alert-danger">
+        Some very specific error message.
+    </div>
+</main>
+
+
+{% endblock %}
+
+{% block custom_js %}
+<script src="/static/js/captcha-user-upload.js"></script>
+
+{% endblock %}
+
+{% block custom_css %}
+<link rel="stylesheet" href="/static/css/spinner.css">
+<link rel="stylesheet" href="/static/css/captcha-user-upload.css">
+{% endblock %}

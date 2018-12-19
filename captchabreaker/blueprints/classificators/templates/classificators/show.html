@@ -1,0 +1,31 @@
+{% extends 'common/admin_base.html' %}
+{% block custom_css %}
+
+<link href="/admin/static/css/dataset_detail.css" rel="stylesheet">
+
+{% endblock %}
+{% block title %}Dataset detail - CaptchaBreaker{% endblock %}
+{% block main %}
+
+<div class="container">
+    <h1>Details of <i>{{classifier.name}}</i></h1>
+    <div class="row">
+        <div class="col">
+            Dataset:{{url_for('admin.datasets_detail', id=classifier.dataset_id)}}
+        </div>
+        <div class="col">
+            Loss:
+        </div>
+        <div class="col">
+            Status:
+        </div>
+    </div>
+    <hr>
+    <form method='post' class="" action="./delete/">
+        <input type='submit' value='Delete' class="btn btn-danger mt-3">
+    </form>
+</div>
+
+{% endblock %}
+{% block custom_js %}
+{% endblock %}

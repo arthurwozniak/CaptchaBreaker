@@ -1,5 +1,5 @@
 
-from captchabreakerweb import app
+from captchabreaker import app
 
 
 if __name__ == '__main__':

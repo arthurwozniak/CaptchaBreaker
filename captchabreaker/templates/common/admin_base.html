@@ -1,0 +1,31 @@
+{% extends 'common/base.html' %}
+
+{% block body %}
+<header>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-inverse">
+        <a class="navbar-brand nav-link" href="/">CaptchaBreaker</a>
+    </nav>
+</header>
+
+<div class="container-fluid">
+    <nav class="col-sm-3 col-md-2 d-none d-sm-block bg-faded sidebar">
+        <ul class="nav nav-pills flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="{{url_for('admin.overview.index')}}">Overview</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{url_for('admin.datasets.index')}}">Datasets</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{url_for('admin.classificators.index')}}">Classificators</a>
+            </li>
+        </ul>
+
+    </nav>
+
+    <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
+        {%block main %} {% endblock %}
+    </main>
+</div>
+
+{% endblock %}

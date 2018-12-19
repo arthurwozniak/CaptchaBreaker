@@ -1,0 +1,30 @@
+# Use postgres/example user/password credentials
+version: '3.1'
+
+services:
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: 'y9Brhf6v'
+    ports:
+      - 5432:5432
+    volumes:
+    - ./postgresql:/var/lib/postgresql
+
+  redis:
+    image: redis
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - 6379:6379
+    volumes:
+      - ./redis:/bitnami/redis/data
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
