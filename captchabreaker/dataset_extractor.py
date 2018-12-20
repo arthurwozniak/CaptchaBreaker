@@ -3,7 +3,7 @@ import io
 import base64
 import collections
 from captchabreaker import modifier
-from captchabreaker.admin.image_parser import parse_operations
+from captchabreaker.image_processing import operations
 from captchabreaker.models import DatasetModel, CharacterModel, OriginalImageModel
 from os.path import basename
 

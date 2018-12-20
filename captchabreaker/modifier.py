@@ -19,7 +19,6 @@ def split_joined_characters(image, boxes):
     # print([[x, projection[x]] for x in range(len(minimas)) if minimas[x]])
     return [[x, projection[x]] for x in range(len(minimas)) if minimas[x] and (projection[x] < 10)]
 
-
 def intersection(a, b):
     x = max(a[0], b[0])
     y = max(a[1], b[1])

@@ -1,0 +1,159 @@
+{% extends 'common/admin_base.html' %}
+{% block custom_css %}
+<link href="/static/css/datasets/new.css" rel="stylesheet">
+{% endblock %}
+{% block title %}Datasets - CaptchaBreaker{% endblock %}
+
+{%block main %}
+
+<style>
+    img {
+        width: 100%;
+    }
+</style>
+
+<div class="content">
+    <h1>New dataset</h1>
+
+    <div id="errors" class="col-md-8 offset-md-4 alert alert-danger">
+
+    </div>
+
+    <div id="step-1">
+
+        <h2>Select archive</h2>
+        <div class="form-group text-center">
+            <label class="btn btn-primary" id="btn-file-input">
+                Browse <input type="file" hidden id="file-input" accept="application/zip" />
+            </label>
+            <label id="lbl-file-input"></label>
+        </div>
+
+
+    </div>
+
+    <div id="step-2" >
+        <h2>Label CAPTCHAs</h2>
+        <div class="row" id="step-2-question">
+
+
+            <div class="col-md-12 text-center">
+                <label class="col-form-label">Manually label images?</label><br />
+                <label id="btn-create-labels" class="btn btn-primary btn-md col-md-4" onClick="labelingStart()">Yes</label>
+                <label id="btn-skip-labels" class="btn btn-danger btn-md col-md-4" onClick="labelingCancel()">Skip</label>
+            </div>
+        </div>
+
+        <div class="row" id="step-2-labeling" hidden>
+            <div class="col-md-12 text-center">
+
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <img id="img-captcha-label" class="" src="" />
+                    </div>
+                </div>
+                <div class="row justify-content-center mt-1">
+                    <label id="lbl-labeling-current"></label>/<label id="lbl-labeling-total"></label>
+                </div>
+                <div class="row align-items-baseline justify-content-center">
+                    <label id="btn-labeling-prev" class="btn btn-primary btn-md col-md-2" onClick="labelingImagePrev()">Prev</label>
+                    <input type="text" id="text-captcha" class="col-md-4 form-control mr-2 ml-2" />
+                    <label id="btn-labeling-next" class="btn btn-primary btn-md col-md-2" onClick="labelingImageNext()">Next</label>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div id="step-3">
+
+
+        <h2>Character extraction</h2>
+        <div class="col-md-12">
+
+
+            <div class="form-group row">
+                <div class="col-md-6">
+                    <label for="file-select" class="col-form-label">Example image</label>
+                    <select class="form-control" id="file-select"> </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="characters-count" class="col-form-label">Characters in captcha</label>
+                    <input type="number" class="form-control" id="characters-count" min="1" max="10" value="5" onchange="charactersCountChanged()">
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <h3>Available operations</h3><br>
+
+                    <ul id="operationListAvailable" class="list-group">
+                        {% for operation in operations %}
+                        <li class="list-group-item" data-class="{{operation.__class__.__name__}}">{{operation.name}}
+                            <div class="details" hidden>
+                                {{operation.desc}} <i class="js-remove">✖</i><br>
+                                {{operation.arg_html() | safe}}
+                            </div>
+                        </li>
+
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h3>Selected operations</h3><br>
+                    <ul id="operationListSelected" class="list-group">
+                    </ul>
+                </div>
+
+                <div class="col-md-4">
+                    <h3>Previews</h3><br>
+                    <div  id="img-previews">
+                        <div class="" id="wrapper-img-original">
+                            <img src="http://placehold.it/300x100" id="img-original" />
+                            <span>Original</span>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+
+
+
+        </div>
+        <div class="col-md-12 text-center">
+            <label id="btn-submit" class="btn btn-primary btn-md col-md-4 mt-3" onClick="submit()">Submit</label><br />
+        </div>
+    </div>
+
+    <div id="step-next" class="col-md-4 offset-md-4 col-sm-12 offset-sm-0 mt-3">
+        <a id="step-next-btn" class="btn btn-block btn-primary" href="#" onclick="nextStep()">Next step</a>
+    </div>
+
+</div>
+
+
+
+{% endblock %} {% block custom_js %}
+
+<!-- Latest Sortable -->
+<script src="/static/js/lib/Sortable.js"></script>
+
+
+<script>
+
+</script>
+
+<script type="text/javascript" src="/static/js/lib/zip.js"></script>
+<script type="text/javascript" src="/static/js/datasets/new.js"></script>
+
+<script type="text/javascript">
+    zip.workerScriptsPath = "/static/js/lib/";
+</script>
+
+
+
+{% endblock %}

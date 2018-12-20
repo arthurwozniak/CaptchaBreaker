@@ -109,3 +109,5 @@ venv.bak/
 # Docker working directories
 docker/postgresql/
 docker/redis/
+
+captchabreaker/config.py

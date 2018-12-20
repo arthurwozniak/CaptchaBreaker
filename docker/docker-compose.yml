@@ -12,16 +12,17 @@ services:
     ports:
       - 5432:5432
     volumes:
-    - ./postgresql:/var/lib/postgresql
+      - ./postgresql:/var/lib/postgresql
 
-  redis:
-    image: redis
+  rabbit:
+    hostname: rabbit
+    image: rabbitmq:latest
     environment:
-      - ALLOW_EMPTY_PASSWORD=yes
+      - RABBITMQ_DEFAULT_USER=rabbitmq
+      - RABBITMQ_DEFAULT_PASS=rabbitmq
     ports:
-      - 6379:6379
-    volumes:
-      - ./redis:/bitnami/redis/data
+      - "5673:5672"
+
 
   adminer:
     image: adminer

@@ -10,4 +10,4 @@ class ClassificatorModel(db.Model):
     is_finished = db.Column(db.Boolean, default=False, nullable=False)
     dataset_id = db.Column(db.Integer, db.ForeignKey('datasets.id'), nullable=False)
     def __repr__(self):
-        return "<Clasificator %s>" % self.name
+        return "<classificator %s>" % self.name

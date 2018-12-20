@@ -1,0 +1,81 @@
+{% extends 'common/admin_base.html' %}
+{% block custom_css %}
+<link href="/static/css/datasets/new.css" rel="stylesheet">
+{% endblock %}
+{% block title %}classificators - CaptchaBreaker{% endblock %}
+
+{%block main %}
+
+<style>
+    img {
+        width: 100%;
+    }
+</style>
+
+<div class="content">
+    <h1>New classificator</h1>
+
+    <div id="errors" class="col-md-8 offset-md-4 alert alert-danger">
+
+    </div>
+
+
+
+    <form method="post" action="{{ url_for('dashboard.classificators.new') }}">
+        <div class="col-md-12">
+
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12 form-group">
+                    <label for="classificator-name" class="col-form-label">Name</label>
+                    <input type="text" class="form-control" name='name' id="classificator-name">
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <label for="classificator-dataset" class="col-form-label">Source dataset</label>
+                    <select name="dataset" id="classificator-dataset" class="form-control">
+                        {% for item in datasets %}
+                        <option value="{{ item.id }}">{{ item.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <label for="classificator-accuracy" class="col-form-label">Minimum accuracy</label>
+                    <input type="number" class="form-control" name='accuracy' id="classificator-accuracy" min="1" max="100" value="98">
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <label for="classificator-max-iterations" class="col-form-label">Maximum iterations</label>
+                    <input type="number" class="form-control" name='max-iterations' id="classificator-max-iterations" min="1" max="10000" value="20">
+                </div>
+
+            </div>
+
+                <button type="submit" class="btn btn-primary col-md-2 mt-3">Submit</button>
+        </div>
+
+
+
+    </form>
+</div>
+
+
+
+{% endblock %} {% block custom_js %}
+
+<!-- Latest Sortable -->
+<script src="/static/js/lib/Sortable.js"></script>
+
+
+<script>
+
+</script>
+
+<script type="text/javascript" src="/static/js/lib/zip.js"></script>
+<script type="text/javascript" src="/static/js/datasets/new.js"></script>
+
+<script type="text/javascript">
+    zip.workerScriptsPath = "/static/js/lib/";
+</script>
+
+
+
+{% endblock %}

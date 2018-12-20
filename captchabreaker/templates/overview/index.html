@@ -1,0 +1,58 @@
+{% extends 'common/admin_base.html' %}
+
+{% block title %}Overview - CaptchaBreaker{% endblock %}
+
+{%block main %}
+<h1>Dashboard</h1>
+
+<section class="placeholders">
+  <div class="row text-center">
+    <div class="col-6 col-sm-3 placeholder">
+      <h1>{{stats['last_day_count']}}</h1>
+      <div class="text-muted">resolved captchas last day</div>
+    </div>
+    <div class="col-6 col-sm-3 placeholder">
+      <h1>{{stats['total_count']}}</h1>
+      <div class="text-muted">resolved captchas overall</div>
+    </div>
+    <div class="col-6 col-sm-3 placeholder">
+      <h1>{{stats['datasets']}}</h1>
+      <div class="text-muted">
+        datasets
+      </div>
+    </div>
+    <div class="col-6 col-sm-3 placeholder">
+      <h1>{{stats['classificators']}}</h1>
+      <div class="text-muted">classificators</div>
+    </div>
+  </div>
+</section>
+
+<h2>classificators in trainig</h2>
+
+{% for classificator in classificators %}
+
+<div class="classificator-training" data-id="{{classificator.task_id}}">
+  <div class="row">
+    <div class="col-md-2">{{classificator.name}}</div><div class="col">Created at {{classificator.created_at}}</div>
+  </div>
+  <div>
+    Status: <span class="status">PENDING</span>
+  </div>
+  {% if not(loop.last) %}
+  <hr>
+  {% endif %}
+</div>
+
+
+{% else %}
+No classificator is currently being trained. See <a href="{{url_for('dashboard.classificators.index')}}">classificators list</a>
+{% endfor %}
+
+{% endblock %}
+
+
+{% block custom_js %}
+<script type="text/javascript" src="/static/js/overview/overview.js"></script>
+
+{% endblock %}

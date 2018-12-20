@@ -1,0 +1,26 @@
+{% extends 'common/admin_base.html' %}
+
+{% block title %}Classificators - CaptchaBreaker{% endblock %}
+
+{%block main %}
+
+<div class="content">
+    <div class="row">
+        <div class="col-md-9">
+            <h2 class="content-subhead">classificators page</h2>
+        </div>
+        <div class="col-md-3">
+            <a class="btn btn-primary btn-block float-right" href="{{url_for('dashboard.classificators.new')}}">New classificator</a>
+        </div>
+    </div>
+    <hr>
+    <div class="col">
+        {% for classificator in classificators %}
+            <div class="row">
+                <a href="{{url_for('dashboard.classificators.show', id=classificator.id)}}">{{classificator.name}}</a> &nbsp;[{{classificator.created_at}}]
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

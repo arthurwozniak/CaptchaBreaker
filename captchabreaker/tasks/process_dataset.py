@@ -4,10 +4,10 @@ import pickle
 import base64
 
 from captchabreaker import celery, app
-from captchabreaker.models import DatasetModel, ClassificatorModel, QueryModel, db
+from captchabreaker.models import DatasetModel, ClassificatorModel, db
 
-from captchabreaker.ml.CNN import CNN
-from captchabreaker.ml.CaptchaBreakerDataset import CaptchaBreakerDataset
+from captchabreaker.image_processing.classificators import CNN
+from captchabreaker.image_processing.dataset import CaptchaBreakerDataset
 
 import torch.optim as optim
 import torch.nn.functional as F
@@ -45,9 +45,10 @@ def short_task():
 
 @celery.task(bind=True)
 def training_task(self, name, dataset_id, accuracy, iterations, task_id=None):
+    print("FFFFFF")
     with app.app_context():
-        clasificator = ClassificatorModel(name=name, task_id=self.request.id, dataset_id=dataset_id, is_finished=False)
-        db.session.add(clasificator)
+        classificator = ClassificatorModel(name=name, task_id=self.request.id, dataset_id=dataset_id, is_finished=False)
+        db.session.add(classificator)
         db.session.commit()
 
         dataset = DatasetModel.query.get(dataset_id)
@@ -84,9 +85,9 @@ def training_task(self, name, dataset_id, accuracy, iterations, task_id=None):
             last_loss = float(loss.data[0])
             current_iteration += 1
 
-        clasificator.network = base64.b64encode(pickle.dumps(cnn.state_dict()))
-        clasificator.is_finished = True
-        #db.session.add(clasificator)
+        classificator.network = base64.b64encode(pickle.dumps(cnn.state_dict()))
+        classificator.is_finished = True
+        #db.session.add(classificator)
         db.session.commit()
         return {'current_iteration': current_iteration, 'max_iterations': iterations,
                 'loss': last_loss, 'status': 'COMPLETED'}

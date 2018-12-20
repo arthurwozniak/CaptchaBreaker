@@ -1,0 +1,68 @@
+{% extends 'common/admin_base.html' %}
+{% block custom_css %}
+<link href="/static/css/datasets/show.css" rel="stylesheet">
+{% endblock %}
+{% block title %}Dataset detail - CaptchaBreaker{% endblock %}
+
+{% block main %}
+
+<div class="container">
+    <h1>Details of <i>{{dataset.name}}</i></h1>
+    <div class="row">
+        <div class="col align-items-center">
+            <span class="font-weight-bold">Created at</span><br>
+            {{dataset.created_at}}
+        </div>
+        <div class="col">
+            <span class="font-weight-bold">Characters</span><br>
+            {% for character in dataset.known_characters -%}
+            {{character|e -}}
+            {% if not loop.last %},{% endif %}
+            {%- endfor %}
+        </div>
+        <div class="col">
+            <span class="font-weight-bold">Characters per image</span><br>
+            {{dataset.characters_per_image}}
+        </div>
+        <div class="col">
+            <span class="font-weight-bold">Total images</span><br>
+            {{images_count}}
+        </div>
+    </div>
+    <hr>
+    <table class="table-striped col-md-12">
+        <thead>
+        <th scope="col">Text</th>
+        <th scope="col">Original image</th>
+        <th scope="col">Recognized characters</th>
+        </thead>
+        <tbody>
+        {% for captcha in dataset.original_images%}
+        {% include "datasets/_show_classificator_row.html" %}
+        {% endfor %}
+        </tbody>
+    </table>
+    <h4 class="mt-3">Config</h4>
+    {{dataset.extraction_config}}
+
+    <form method='post' class="" action="./delete/">
+
+        <input type='submit' value='Delete' class="btn btn-danger mt-3">
+
+    </form>
+</div>
+
+{% endblock %} {% block custom_js %}
+<script type="text/javascript" src="/static/js/lib/recliner.js"></script>
+
+<script>
+    $(function() {
+        $(".lazy").recliner({
+            attrib: "data-src", // selector for attribute containing the media src
+            throttle: 100,      // millisecond interval at which to process events
+            threshold: 300,     // scroll distance from element before its loaded
+            live: false          // auto bind lazy loading to ajax loaded elements
+        });
+    });
+</script>
+{% endblock %}
