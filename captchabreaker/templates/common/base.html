@@ -14,24 +14,31 @@
 </head>
 
 <body>
+    <div class="col-lg-8 offset-lg-2 col-md-10">
+        {% block header %}
 
-{% include 'common/_header.html' %}
+        {% include 'common/_header.html' %}
+
+        {% endblock %}
+        <div class="flash-messages">
+            {% include 'common/_messages.html' %}
+        </div>
+
+        {% block body %}{% endblock %}
+
+        {% include 'common/_footer.html' %}
+
+        <script src="/static/js/lib/jquery-3.3.1.min.js"></script>
+        <!--
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        -->
+        <script src="/static/js/lib/bootstrap.min.js"></script>
+        <script src="/static/js/lib/custom.js"></script>
 
 
-{% block body %}{% endblock %}
+        {% block custom_js %}{% endblock %}
 
-{% include 'common/_footer.html' %}
-
-<script src="/static/js/lib/jquery-3.3.1.min.js"></script>
-<!--
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
--->
-<script src="/static/js/lib/bootstrap.min.js"></script>
-
-
-{% block custom_js %}{% endblock %}
-
-
+    </div>
 </body>
 
 </html>

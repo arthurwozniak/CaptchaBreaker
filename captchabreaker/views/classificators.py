@@ -3,19 +3,25 @@ from captchabreaker.models import ClassificatorModel, DatasetModel
 from flask import g
 
 from flask import render_template, request, redirect, url_for
+from flask_simplelogin import login_required
 
 blueprint = get_blueprint_for(ClassificatorModel)
+
+
 @blueprint.route('/')
+@login_required
 def index():
     classificator = ClassificatorModel.query.all()
     return render_template('classificators/index.html', classificator=classificator)
 
 
 @blueprint.route('/new/', methods=['GET', 'POST'])
+@login_required
 def new():
     if request.method == 'GET':
         return render_template('classificators/new.html', datasets=DatasetModel.query.all())
     return create()
+
 
 def create():
     from captchabreaker.tasks.process_dataset import training_task
@@ -31,6 +37,7 @@ def create():
 
 
 @blueprint.route('/<int:id>/')
+@login_required
 def show(id):
     classificator = ClassificatorModel.query.get(id)
     if classificator is None:
@@ -39,6 +46,7 @@ def show(id):
 
 
 @blueprint.route('/<int:id>/delete/', methods=['POST'])
+@login_required
 def delete(id):
     classificator = ClassificatorModel.query.get(id)
     if classificator:

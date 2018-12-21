@@ -1,11 +1,12 @@
 from flask import Blueprint, redirect, url_for, render_template
 from datetime import datetime, timedelta
 from captchabreaker.models import DatasetModel, OriginalImageModel, db, ClassificatorModel, QueryModel
-
+from flask_simplelogin import login_required
 blueprint = Blueprint('dashboard.overview', __name__, template_folder='templates', static_folder='static', url_prefix='/dashboard')
 
 
 @blueprint.route('/')
+@login_required
 def index():
     classificators = ClassificatorModel.query.filter_by(is_finished=False).all()
     dataset_count = DatasetModel.query.count()

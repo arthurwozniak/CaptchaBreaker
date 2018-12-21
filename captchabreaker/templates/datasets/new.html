@@ -1,8 +1,8 @@
-{% extends 'common/admin_base.html' %}
+{% extends 'common/dashboard/base.html' %}
 {% block custom_css %}
 <link href="/static/css/datasets/new.css" rel="stylesheet">
 {% endblock %}
-{% block title %}Datasets - CaptchaBreaker{% endblock %}
+{% block title %}{{title_generator("New dataset")}}{% endblock %}
 
 {%block main %}
 

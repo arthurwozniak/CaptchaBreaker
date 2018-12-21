@@ -1,5 +1,6 @@
-<header>
-  <div class="col-lg-8 offset-lg-2 pt-3 text-center col-md-10 offset-md-1">
-        <h1>CaptchaBreaker</h1>
+ <div class="pt-3 text-center header">
+      <h1><a href="{{url_for('demo.index')}}" class="link-unstyled">{{title_generator()}}</a></h1>
+      {% if is_logged_in() %}
+      <div class="logout"><a class="navbar-brand nav-link" href="{{url_for('simplelogin.logout')}}">logout</a></div>
+      {% endif %}
   </div>
-</header>

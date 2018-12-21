@@ -1,0 +1,14 @@
+{% extends 'common/base.html' %}
+
+{% block header %}
+{{ super() }}
+{% include 'common/dashboard/_header.html' %}
+{% endblock %}
+
+{% block body %}
+
+    <main role="main" class="">
+        {%block main %} {% endblock %}
+    </main>
+
+{% endblock %}

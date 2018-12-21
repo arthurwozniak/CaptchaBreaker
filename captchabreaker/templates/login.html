@@ -1,0 +1,39 @@
+{% extends 'common/base.html' %}
+{% block title %}{{title_generator("Login")}}{% endblock %}
+
+{% block messages %}
+
+{{super()}}
+   {%if form.errors %}
+     <ul class="alert alert-danger">
+       {% for field, errors in form.errors.items() %}
+         <li>{{field}} {% for error in errors %}{{ error }}{% endfor %}</li>
+       {% endfor %}
+     </ul>
+   {% endif %}
+{% endblock %}
+
+{% block body %}
+<main role="main" class="col-md-4 offset-md-4 col-sm-10 offset-sm-1">
+    <div class="login-form">
+        {{super()}}
+        {%if form.errors %}
+        <ul class="alert alert-danger">
+            {% for field, errors in form.errors.items() %}
+            <li>{{field}} {% for error in errors %}{{ error }}{% endfor %}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <form action="{{ url_for('simplelogin.login', next=request.args.get('next', '/')) }}" method="post">
+            {{ form.csrf_token }}
+            <div class="form-group">
+                <input type="text" id="username" name="username" class="form-control" placeholder="Username" required>
+            </div>
+            <div class="form-group">
+                <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+            </div>
+                <button type="submit" class="btn btn-primary col-md-12">Submit</button>
+        </form>
+    </div>
+</main>
+{% endblock %}

@@ -1,10 +1,10 @@
-{% extends 'common/admin_base.html' %}
+{% extends 'common/dashboard/base.html' %}
 {% block custom_css %}
 
 <link href="/admin/static/css/dataset_detail.css" rel="stylesheet">
 
 {% endblock %}
-{% block title %}Dataset detail - CaptchaBreaker{% endblock %}
+{% block title %}{{title_generator("Classificator detail")}}{% endblock %}
 {% block main %}
 
 <div class="container">

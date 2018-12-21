@@ -7,7 +7,7 @@ from captchabreaker.models import ClassificatorModel
 blueprint = Blueprint('demo', __name__, template_folder='templates', static_folder='static')
 
 @blueprint.route('/')
-def home():
+def index():
     return render_template('demo/index.html', classificators=ClassificatorModel.query.all())
 
 @blueprint.route('/decode', methods=['POST'])

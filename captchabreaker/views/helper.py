@@ -1,6 +1,6 @@
 from flask import Blueprint
 from captchabreaker.image_processing.helper import parse_args
-
+from captchabreaker import config
 
 def get_blueprint_for(model):
     tablename = model.__tablename__
@@ -18,3 +18,11 @@ def parse_operations(operations_json):
         operations.append(op)
     return operations
 
+def is_current_blueprint(request, blueprint_name):
+    return request.blueprint.endswith(blueprint_name)
+
+def title_generator(location=None):
+    if location:
+        return "{} - {}".format(config.HTML_TITLE, location)
+    else:
+        return config.HTML_TITLE

@@ -1,6 +1,7 @@
 from captchabreaker.views.helper import get_blueprint_for
 from flask import redirect, request, url_for, jsonify, send_file
 from flask import render_template
+from flask_simplelogin import login_required
 from captchabreaker import dataset_extractor
 from captchabreaker import modifier
 from captchabreaker.image_processing import operations
@@ -11,11 +12,13 @@ import io
 blueprint = get_blueprint_for(DatasetModel)
 
 @blueprint.route('/')
+@login_required
 def index():
     return render_template('datasets/index.html', datasets=DatasetModel.query.all())
 
 
 @blueprint.route('/new', methods=['GET', 'POST'])
+@login_required
 def new():
     if request.method == 'GET':
         print(operations.operations())
@@ -47,6 +50,7 @@ def create():
                     'id': res.id})
 
 @blueprint.route('/<int:id>/')
+@login_required
 def show(id):
     dataset = DatasetModel.query.get(id)
     characters = ''.join([image.text for image in dataset.original_images])
@@ -57,6 +61,7 @@ def show(id):
 
 
 @blueprint.route('/<int:dataset_id>/image/<int:image_id>/')
+@login_required
 def image(dataset_id, image_id):
     image = OriginalImageModel.query.get(image_id)
     binary = base64.b64decode(image.data)
@@ -67,6 +72,7 @@ def image(dataset_id, image_id):
         attachment_filename='%s.png' % image.text)
 
 @blueprint.route('/<int:dataset_id>/character/<int:character_id>/')
+@login_required
 def character(dataset_id, character_id):
     image = CharacterModel.query.get(character_id)
     binary = base64.b64decode(image.image)
@@ -77,6 +83,7 @@ def character(dataset_id, character_id):
         attachment_filename='%s.bmp' % image.character)
 
 @blueprint.route('/preview', methods=['GET', 'POST'])
+@login_required
 def preview():
     print(request.json)
     print(type(request.json))
@@ -97,8 +104,11 @@ def preview():
 
 
 @blueprint.route('/<int:id>/delete/', methods=['POST'])
-def dataset_delete(id):
+@login_required
+def delete(id):
     dataset = DatasetModel.query.get(id)
+    if dataset is None:
+        return redirect(url_for('dashboard.datasets.index'))
     db.session.delete(dataset)
     db.session.commit()
-    return redirect(url_for('admin.datasets'))
+    return redirect(url_for('dashboard.datasets.index'))
