@@ -14,6 +14,6 @@ def get_instance_folder_path():
 
 
 def set_file_logger(app):
-    handler = RotatingFileHandler(config.LOG_FILENAME, maxBytes=10000, backupCount=1)
-    handler.setLevel(logging.INFO)
+    handler = RotatingFileHandler(config.LOG_FILENAME, maxBytes=1e6, backupCount=10)
+    handler.setLevel(logging.DEBUG)
     app.logger.addHandler(handler)

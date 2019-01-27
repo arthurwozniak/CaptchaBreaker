@@ -6,8 +6,10 @@ class ClassificatorModel(db.Model):
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
     name = db.Column(db.String, nullable=False)
     network = db.Column(db.String)
-    task_id = db.Column(db.String, nullable=False)
+    task_id = db.Column(db.String)
     is_finished = db.Column(db.Boolean, default=False, nullable=False)
     dataset_id = db.Column(db.Integer, db.ForeignKey('datasets.id'), nullable=False)
+    config = db.Column(db.JSON, nullable=False, default={})
+
     def __repr__(self):
         return "<classificator %s>" % self.name

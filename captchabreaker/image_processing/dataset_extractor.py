@@ -1,11 +1,10 @@
-import zipfile
-import io
 import base64
-import collections
-from captchabreaker import modifier
-from captchabreaker.image_processing import operations
-from captchabreaker.models import DatasetModel, CharacterModel, OriginalImageModel
+import io
+import zipfile
 from os.path import basename
+
+from captchabreaker import modifier
+from captchabreaker.models import DatasetModel, CharacterModel, OriginalImageModel
 
 
 class DatasetExtractor:
@@ -20,8 +19,6 @@ class DatasetExtractor:
             self.zip = zipfile.ZipFile(buf)
         self.name = name
         self.operations_json = operations_json
-        print("FOO")
-
 
     def process_zip(self):
         items = self.zip.infolist()
@@ -59,7 +56,7 @@ class DatasetExtractor:
         return result
 
 
-    def process_and_save(self):
+    def perform(self):
         from captchabreaker.models import db
         import cv2
 

@@ -40,16 +40,16 @@ function submit() {
     dataType: 'html',
     contentType: 'application/json;charset=UTF-8',
     success: function(result) {
-      result = JSON.parse(result);
-      if (result['status'] == 'error') {
-        showError(result['message']);
+      result_parsed = JSON.parse(result);
+      if (result_parsed['status'] == 'error') {
+        showError(result_parsed['message']);
       } else {
-        showResult(result['message']);
+        showResult(result_parsed['message']);
       }
     },
     error: function(result) {
       showError(
-        'An error has occured. Please try later or select different classificator.',
+        'An error has occurred. Please try later or select different classificator.',
       );
     },
     complete: function(result) {

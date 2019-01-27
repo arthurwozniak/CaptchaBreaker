@@ -3,7 +3,6 @@
 {% block title %}{{title_generator("Overview")}}{% endblock %}
 
 {%block main %}
-<h1>Dashboard</h1>
 
 <section class="placeholders">
   <div class="row text-center">
@@ -32,7 +31,7 @@
 
 {% for classificator in classificators %}
 
-<div class="classificator-training" data-id="{{classificator.task_id}}">
+<div class="classificator-training" data-id="{{classificator.id}}">
   <div class="row">
     <div class="col-md-2">{{classificator.name}}</div><div class="col">Created at {{classificator.created_at}}</div>
   </div>

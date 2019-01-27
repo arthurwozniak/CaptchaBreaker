@@ -1,9 +1,9 @@
-from .helper import *
-from captchabreaker.models import ClassificatorModel, DatasetModel
 from flask import g
-
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, jsonify
 from flask_simplelogin import login_required
+
+from captchabreaker.models import ClassificatorModel, DatasetModel, db
+from .helper import *
 
 blueprint = get_blueprint_for(ClassificatorModel)
 
@@ -11,8 +11,8 @@ blueprint = get_blueprint_for(ClassificatorModel)
 @blueprint.route('/')
 @login_required
 def index():
-    classificator = ClassificatorModel.query.all()
-    return render_template('classificators/index.html', classificator=classificator)
+    classificators = ClassificatorModel.query.all()
+    return render_template('classificators/index.html', classificators=classificators)
 
 
 @blueprint.route('/new/', methods=['GET', 'POST'])
@@ -25,13 +25,12 @@ def new():
 
 def create():
     from captchabreaker.tasks.process_dataset import training_task
-    print(request.form)
-    name = request.form.get('name')
-    dataset_id = request.form.get('dataset', default=0, type=int)
-    accuracy = request.form.get('accuracy', default=0, type=int)
-    iterations = request.form.get('max-iterations', default=20, type=int)
-    # return render_template('index.html', datasets=DatasetModel.query.all())
-    task = training_task.delay(name, dataset_id, accuracy, iterations)
+    params = classificator_parameters_from(request)
+    print(params)
+    classificator = ClassificatorModel(name=params['name'], dataset_id=params['dataset_id'], is_finished=False, config=params)
+    db.session.add(classificator)
+    db.session.commit()
+    task = training_task.delay(classificator.id)
     # TODO: fix celery communication
     return redirect(url_for('dashboard.overview.index'))
 
@@ -50,6 +49,15 @@ def show(id):
 def delete(id):
     classificator = ClassificatorModel.query.get(id)
     if classificator:
-        g.db.session.delete(classificator)
-        g.db.session.commit()
+        db.session.delete(classificator)
+        db.session.commit()
     return redirect(url_for('dashboard.classificators.index'))
+
+
+def classificator_parameters_from(request):
+    return {
+        'name': request.form.get('name'),
+        'dataset_id': request.form.get('dataset', default=0, type=int),
+        'accuracy': request.form.get('accuracy', default=0, type=int),
+        'iterations': request.form.get('max-iterations', default=20, type=int)
+    }

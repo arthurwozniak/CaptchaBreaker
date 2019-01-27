@@ -103,9 +103,9 @@ venv.bak/
 # mkdocs documentation
 /site
 
-# mypy
-.mypy_cache/
-
+# dataset directories
+data/
+datasets/
 # Docker working directories
 docker/postgresql/
 docker/redis/

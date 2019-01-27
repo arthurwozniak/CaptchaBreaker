@@ -1,14 +1,13 @@
 function classificatorTaskStatus(id, status_elem) {
-  var error_msg = 'ERROR: {}';
   $.ajax({
     type: 'GET',
-    url: '../status/' + id,
+    url: './task_status/' + id,
     data: '',
     dataType: 'html',
     contentType: 'application/json;charset=UTF-8',
-    success: function(result) {
+    success: function(ajax_result) {
       var text;
-      result = JSON.parse(result);
+      result = JSON.parse(ajax_result);
       switch (result.state) {
         case 'FAILURE':
           status_elem.text('ERROR: ' + result.status);
@@ -17,7 +16,7 @@ function classificatorTaskStatus(id, status_elem) {
           status_elem.text('PENDING');
           break;
         case 'SUCCESS':
-          console.log(status_elem.closest('.classificator-training').remove());
+          status_elem.closest('.classificator-training').remove();
           break;
         default:
           text =
@@ -38,7 +37,10 @@ function classificatorTaskStatus(id, status_elem) {
 
 function updateStatus() {
   $('.classificator-training').each(function(elem) {
-    status = classificatorTaskStatus($(this).data('id'), $(this).find('.status'));
+    status = classificatorTaskStatus(
+      $(this).data('id'),
+      $(this).find('.status'),
+    );
   });
 }
 

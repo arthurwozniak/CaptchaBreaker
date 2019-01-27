@@ -2,14 +2,15 @@ from captchabreaker.views.helper import get_blueprint_for
 from flask import redirect, request, url_for, jsonify, send_file
 from flask import render_template
 from flask_simplelogin import login_required
-from captchabreaker import dataset_extractor
 from captchabreaker import modifier
-from captchabreaker.image_processing import operations
+from captchabreaker.image_processing import operations, dataset_extractor
 from captchabreaker.image_processing import helper
 from captchabreaker.models import DatasetModel, db, OriginalImageModel, CharacterModel
 import base64
 import io
+
 blueprint = get_blueprint_for(DatasetModel)
+
 
 @blueprint.route('/')
 @login_required
@@ -21,42 +22,34 @@ def index():
 @login_required
 def new():
     if request.method == 'GET':
-        print(operations.operations())
         return render_template('datasets/new.html', operations=operations.operations())
     return create()
 
 
 def create():
-    print("FO")
-    print(request.json.keys())
-    # print(dataset_extractor.zip_from_base(request.json.get("file")))
-    # print(request.json.get("operations"))
     archive = request.json.get("file")
-    print("FO")
     operations = helper.parse_operations(request.json.get('operations', []))
-    print("FO")
     name = request.json.get("fileName")
-    print("FO")
     labels = request.json.get("labels", None)
     count = request.json.get("count", 0)
     extractor = dataset_extractor.DatasetExtractor(archive, operations, name, count, request.json.get('operations'),
                                                    labels)
     try:
-        res = extractor.process_and_save()
+        res = extractor.perform()
     except Exception as e:
         return jsonify({'status': 'error',
                         'message': str(e)})
     return jsonify({'status': 'success',
                     'id': res.id})
 
+
 @blueprint.route('/<int:id>/')
 @login_required
 def show(id):
     dataset = DatasetModel.query.get(id)
-    characters = ''.join([image.text for image in dataset.original_images])
-    images_count = len(dataset.original_images)
     if dataset is None:
         return redirect(url_for('admin.datasets'))
+    images_count = len(dataset.original_images)
     return render_template('datasets/show.html', dataset=dataset, images_count=images_count)
 
 
@@ -71,6 +64,7 @@ def image(dataset_id, image_id):
         as_attachment=True,
         attachment_filename='%s.png' % image.text)
 
+
 @blueprint.route('/<int:dataset_id>/character/<int:character_id>/')
 @login_required
 def character(dataset_id, character_id):
@@ -82,13 +76,11 @@ def character(dataset_id, character_id):
         as_attachment=True,
         attachment_filename='%s.bmp' % image.character)
 
+
 @blueprint.route('/preview', methods=['GET', 'POST'])
 @login_required
 def preview():
-    print(request.json)
-    print(type(request.json))
     operations = helper.parse_operations(request.json.get('operations', []))
-    print(operations)
     encoded_image = request.json.get("image")
 
     last_img = modifier.blob_to_img(encoded_image)
@@ -107,8 +99,7 @@ def preview():
 @login_required
 def delete(id):
     dataset = DatasetModel.query.get(id)
-    if dataset is None:
-        return redirect(url_for('dashboard.datasets.index'))
-    db.session.delete(dataset)
-    db.session.commit()
+    if dataset:
+        db.session.delete(dataset)
+        db.session.commit()
     return redirect(url_for('dashboard.datasets.index'))

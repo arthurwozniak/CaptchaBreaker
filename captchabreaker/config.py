@@ -1,7 +1,7 @@
-DEBUG = True
+DEBUG = False
 
-CELERY_BROKER_URL = 'amqp://rabbitmq:rabbitmq@127.0.0.1:5672'
-CELERY_RESULT_BACKEND = 'rpc://'
+CELERY_BROKER_URL = 'amqp://rabbitmq:rabbitmq@127.0.0.1:5673'
+CELERY_RESULT_BACKEND = 'amqp://rabbitmq:rabbitmq@127.0.0.1:5673'
 
 SQLALCHEMY_DATABASE_URI = 'postgresql://docker:y9Brhf6v@127.0.0.1'
 SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -16,3 +16,5 @@ LOG_FILENAME = 'captcha_app.log'
 EXPLAIN_TEMPLATE_LOADING = False
 
 HTML_TITLE = 'CaptchaBreaker'
+
+MODEL_DIRECTORY = '/home/kamil/git/CaptchaBreaker/data'
