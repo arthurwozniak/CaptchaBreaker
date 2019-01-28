@@ -1,4 +1,5 @@
 from . import db
+from celery.result import AsyncResult
 
 class ClassificatorModel(db.Model):
     __tablename__ = 'classificators'
@@ -13,3 +14,11 @@ class ClassificatorModel(db.Model):
 
     def __repr__(self):
         return "<classificator %s>" % self.name
+
+    @property
+    def task(self):
+        return AsyncResult(self.task_id, backend=AsyncResult(self.task_id).backend)
+
+    @staticmethod
+    def finished():
+        return ClassificatorModel.query.filter(ClassificatorModel.is_finished == True)

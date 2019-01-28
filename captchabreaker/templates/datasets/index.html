@@ -12,9 +12,9 @@
     </div>
     <hr>
     <div class="col">
-        {% for i in datasets %}
+        {% for dataset in datasets %}
         <div class="row">
-            <a href="./{{i.id}}/">{{i.name}}</a> &nbsp;[{{i.created_at}}]
+            {{dataset.created_at|datetime}}&nbsp;|&nbsp;<a href="{{url_for('dashboard.datasets.show', id=dataset.id)}}">{{dataset.name}}</a>
         </div>
         {% endfor %}
     </div>

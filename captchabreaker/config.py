@@ -1,7 +1,7 @@
 DEBUG = False
 
 CELERY_BROKER_URL = 'amqp://rabbitmq:rabbitmq@127.0.0.1:5673'
-CELERY_RESULT_BACKEND = 'amqp://rabbitmq:rabbitmq@127.0.0.1:5673'
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'
 
 SQLALCHEMY_DATABASE_URI = 'postgresql://docker:y9Brhf6v@127.0.0.1'
 SQLALCHEMY_TRACK_MODIFICATIONS = False

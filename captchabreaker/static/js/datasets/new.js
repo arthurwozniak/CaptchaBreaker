@@ -288,11 +288,11 @@ var model = (function() {
                 onEndCallback,
                 function(current, total) {
                     // onprogress callback
-                    return;
+
                 },
                 function(error) {
                     // onerror callback
-                    return;
+
                 },
             );
         },

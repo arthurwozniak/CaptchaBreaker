@@ -1,5 +1,5 @@
 from celery import Celery
-from celery.bin import worker
+
 
 def make_celery(app):
     celery = Celery(

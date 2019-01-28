@@ -14,7 +14,9 @@
     <div class="col">
         {% for classificator in classificators %}
             <div class="row">
-                <a href="{{url_for('dashboard.classificators.show', id=classificator.id)}}">{{classificator.name}}</a> &nbsp;[{{classificator.created_at}}]
+                {{classificator.created_at|datetime}}&nbsp;|&nbsp;
+                <a href="{{url_for('dashboard.classificators.show', id=classificator.id)}}">{{classificator.name}}</a>
+                {{classificator.task.backend}}
             </div>
         {% endfor %}
     </div>
