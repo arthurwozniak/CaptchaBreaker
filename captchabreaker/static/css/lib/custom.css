@@ -1,0 +1,39 @@
+.btn:focus,.btn:active {
+    outline: none !important;
+}
+
+.heart {
+    color:#ef4545
+}
+
+.link-unstyled, .link-unstyled:link, .link-unstyled:hover {
+    color: inherit;
+    text-decoration: inherit;
+}
+
+.flash-messages {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.header {
+    position: relative;
+}
+
+h1 {
+  padding-bottom: 9px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.logout {
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+}
+
+#footer{
+    margin-top: 5em;
+    border-top: rgb(238, 238, 238) 1px solid;
+}
