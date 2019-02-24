@@ -46,7 +46,7 @@ def get_letters(image, boxes):
 
 def get_contours(image):
     # Najdeme obdélníky ohraničující spojité plochy v obrázku
-    im2, contours, hierarchy = cv2.findContours(
+    contours, hierarchy = cv2.findContours(
         image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     # Odstraníme malé plochy představující šum nebo "kousky" číslic
