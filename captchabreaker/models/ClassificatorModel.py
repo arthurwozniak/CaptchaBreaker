@@ -2,6 +2,7 @@ from . import db
 from celery.result import AsyncResult
 
 class ClassificatorModel(db.Model):
+
     __tablename__ = 'classificators'
     id = db.Column(db.Integer, primary_key=True)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
@@ -17,7 +18,9 @@ class ClassificatorModel(db.Model):
 
     @property
     def task(self):
-        return AsyncResult(self.task_id, backend=AsyncResult(self.task_id).backend)
+        from captchabreaker import celery
+
+        return celery.AsyncResult(self.task_id)
 
     @staticmethod
     def finished():
