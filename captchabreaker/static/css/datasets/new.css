@@ -9,3 +9,7 @@ min-height: 100px;
 		right: 10px;
 		position: absolute;
 }
+
+img {
+	width: 100%;
+}

@@ -2,7 +2,7 @@
 /* Preview image style */
 
 #img-preview {
-    width: 100%;
+  width: 100%;
 }
 
 
@@ -33,9 +33,9 @@
 
   cursor: pointer;
   -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .funkyradio input[type="radio"]:empty ~ label:before,
@@ -113,6 +113,13 @@
 
 .funkyradio-info input[type="radio"]:checked ~ label:before,
 .funkyradio-info input[type="checkbox"]:checked ~ label:before {
-    color: #fff;
-    background-color: #5bc0de;
+  color: #fff;
+  background-color: #5bc0de;
+}
+
+.random-image {
+  display: block;
+  width: 50%;
+  height: auto;
+  float: right;
 }

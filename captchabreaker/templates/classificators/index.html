@@ -4,20 +4,16 @@
 
 {%block main %}
 
-<div class="content">
+<div>
     <div class="row">
         <div class="offset-md-9 col-md-3">
             <a class="btn btn-primary btn-block float-right" href="{{url_for('dashboard.classificators.new')}}">New classificator</a>
         </div>
     </div>
     <hr>
-    <div class="col">
+    <div class="container">
         {% for classificator in classificators %}
-            <div class="row">
-                {{classificator.created_at|datetime}}&nbsp;|&nbsp;
-                <a href="{{url_for('dashboard.classificators.show', id=classificator.id)}}">{{classificator.name}}</a>
-                {{classificator.task.backend}}
-            </div>
+            {% include "classificators/_classificator_row.html" %}
         {% endfor %}
     </div>
 </div>

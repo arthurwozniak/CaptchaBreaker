@@ -6,25 +6,10 @@
 
         <div class="funkyradio-primary">
             <input type="radio" name="classificator" id="classificator-{{classificator.id}}" value="{{classificator.id}}" {% if loop.first %}checked{% endif %}/>
-            <label for="classificator-{{classificator.id}}">{{ classificator.name }}</label>
+
+            <label for="classificator-{{classificator.id}}">{{ classificator.name }}<img class="random-image" src="{{url_for('demo.random_image', classificator_id=classificator.id)}}"></label>
         </div>
         {% endfor %}
-        <div class="funkyradio-primary">
-            <input type="radio" name="classificator" id="classificator-101" />
-            <label for="classificator-101">Not working ID 101</label>
-        </div>
-        <div class="funkyradio-primary">
-            <input type="radio" name="classificator" id="classificator-102" />
-            <label for="classificator-102">Not working ID 102</label>
-        </div>
-        <div class="funkyradio-primary">
-            <input type="radio" name="classificator" id="classificator-103" />
-            <label for="classificator-103">Not working ID 103</label>
-        </div>
-        <div class="funkyradio-primary">
-            <input type="radio" name="classificator" id="classificator-104" />
-            <label for="classificator-104">Not working ID 105</label>
-        </div>
 
     </div>
 </div>

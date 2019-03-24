@@ -1,4 +1,4 @@
-DEBUG = False
+DEBUG = True
 
 CELERY_BROKER_URL = 'amqp://rabbitmq:rabbitmq@127.0.0.1:5673'
 CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'

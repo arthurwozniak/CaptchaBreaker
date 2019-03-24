@@ -1,0 +1,8 @@
+<div class="row">
+    {{classificator.created_at|datetime}}&nbsp;|&nbsp;
+    <a href="{{url_for('dashboard.classificators.show', id=classificator.id)}}">{{classificator.name}}</a>
+    &nbsp;
+    {% if classificator.is_finished %}
+    [finished]
+    {% endif %}
+</div>

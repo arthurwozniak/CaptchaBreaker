@@ -8,6 +8,7 @@ from captchabreaker.image_processing import helper
 from captchabreaker.models import DatasetModel, db, OriginalImageModel, CharacterModel
 import base64
 import io
+import random
 
 blueprint = get_blueprint_for(DatasetModel)
 
