@@ -7,6 +7,7 @@ from .ThresholdCustom import ThresholdCustom
 from .ThresholdOtsu import ThresholdOtsu
 from captchabreaker.image_processing.operations.parameters.Integer import Integer
 from .Inverse import Inverse
+from .Crop import Crop
 
 from operator import attrgetter
 
@@ -19,7 +20,8 @@ def operations():
                   Grayscale(),
                   Inverse(),
                   ThresholdOtsu(),
-                  ThresholdCustom()]
+                  ThresholdCustom(),
+                  Crop()]
     return sorted(operations, key=attrgetter('_custom_name'))
 
 def parameters():

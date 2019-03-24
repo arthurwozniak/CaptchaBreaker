@@ -50,7 +50,7 @@ def get_contours(image):
         image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     # Odstraníme malé plochy představující šum nebo "kousky" číslic
-    contours_filtered = [c for c in contours if cv2.contourArea(c) >= 20]
+    contours_filtered = [c for c in contours if cv2.contourArea(c) >= 5]
 
     # print("Počet ploch: %d" % len(contours_filtered))
     return contours_filtered
@@ -117,6 +117,7 @@ def img_filter(image, lower=0, upper=0):
 def img_unmask(image, count, onlyLetters=False):
     image = image.copy()
     contours = get_contours(image.copy())
+    print(len(contours))
     boxes = contours_to_boxes(contours)
     print("captcha letters: ", count)
     print("boxes found: ", len(boxes))

@@ -1,5 +1,4 @@
 class AbstractParserOperation(object):
-
     _custom_name = "Here place operation name"
 
     @property
@@ -9,7 +8,6 @@ class AbstractParserOperation(object):
     @property
     def desc(self):
         return "Description " + self._custom_name
-
 
     def __init__(self):
         return
