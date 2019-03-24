@@ -1,12 +1,13 @@
 {% extends 'common/dashboard/base.html' %}
 {% block custom_css %}
-<link href="/static/css/datasets/new.css" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/datasets/new.css">
+<link rel="stylesheet" href="/static/css/lib/spinner.css">
 {% endblock %}
 {% block title %}{{title_generator("New dataset")}}{% endblock %}
 
 {%block main %}
 
-<div class="container">
+<div class="content">
     <h1>New dataset</h1>
 
     <div id="errors" class="col-md-8 offset-md-4 alert alert-danger">
@@ -22,9 +23,6 @@
     </div>
 
 </div>
-
-
-
 {% endblock %}
 
 {% block custom_js %}

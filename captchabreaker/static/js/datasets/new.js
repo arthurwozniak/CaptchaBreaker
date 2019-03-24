@@ -13,8 +13,10 @@ var operations = ['grayscale', 'treshold', 'filter', 'unmask'];
 var step = 1;
 var totalSteps = 3;
 var stepNextBtn = $('#step-next-btn');
+var submitBtn = $('#btn-submit');
 
 var errors = $('#errors');
+var spinner = $('#spinner');
 
 var requestFileSystem =
     this.webkitRequestFileSystem ||
@@ -45,6 +47,7 @@ function nextStep() {
     // disable next step (until enabled in file-select listener)
     stepNextBtn.toggleClass('disabled', true);
     hideErrors();
+    spinner.hide();
 })();
 
 /* error helpers */
@@ -442,6 +445,8 @@ function submit() {
                 operations: jsonifyOperations(),
                 count: parseInt($('#characters-count').val(), 10),
             };
+            submitBtn.hide();
+            spinner.show();
             if (labels) {
                 query.labels = labels;
             }
@@ -455,6 +460,8 @@ function submit() {
                 success: function(result) {
                     var parsedResult = JSON.parse(result);
                     if (parsedResult.status === 'error') {
+                        submitBtn.show();
+                        spinner.hide();
                         showErrors(parsedResult.message);
                     } else {
                         window.location = parsedResult.id;
