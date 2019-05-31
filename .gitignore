@@ -24,7 +24,7 @@ venv.bak/
 
 # dataset directories
 data/
-datasets/
+./datasets/
 # Docker working directories
 docker/postgresql/
 docker/redis/

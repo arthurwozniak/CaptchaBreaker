@@ -1,0 +1,37 @@
+<div id="step-2" >
+    <div class="col-md-8 offset-md-2 pr-0 pl-0" id="step-2-question">
+        <div class="col-md-12 text-center">
+            <label class="col-form-label">Manually label images?</label><br />
+            <div class="row">
+                <div class="col-md-6 pl-0 pr-1">
+                    <label id="btn-create-labels" class="btn btn-primary btn-md col-md-12 pl-0 pr-0" onClick="labelingStart()">Yes</label>
+                </div>
+                <div class="col-md-6 pr-0 pl-1">
+                    <label id="btn-skip-labels" class="btn btn-danger btn-md col-md-12" onClick="labelingCancel()">Skip</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8 offset-md-2" id="step-2-labeling" hidden>
+        <div class="row justify-content-center">
+            <div class="col pl-0 pr-0">
+                <img id="img-captcha-label" class="" src="" />
+            </div>
+        </div>
+        <div class="row justify-content-center mt-1">
+            <label id="lbl-labeling-current"></label>/<label id="lbl-labeling-total"></label>
+        </div>
+        <div class="row">
+            <div class="col-md-2 pl-0 pr-0">
+                <label id="btn-labeling-prev" class="btn btn-primary btn-md mb-0 col-md-12" onClick="labelingImagePrev()">Prev</label>
+            </div>
+            <div class="col-md-8">
+                <input type="text" id="text-captcha" class="col-md-12 form-control" />
+            </div>
+            <div class="col-md-2 pl-0 pr-0">
+                <label id="btn-labeling-next" class="btn btn-primary btn-md mb-0 col-md-12" onClick="labelingImageNext()">Next</label>
+            </div>
+        </div>
+    </div>
+</div>
