@@ -24,7 +24,7 @@ set_file_logger(app)
 
 celery = make_celery(app)
 
-from captchabreaker.tasks.process_dataset import training_task
+from captchabreaker.tasks.training_task import training_task
 
 
 db.init_app(app)

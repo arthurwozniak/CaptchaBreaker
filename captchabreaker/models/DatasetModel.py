@@ -5,7 +5,7 @@ class DatasetModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
     name = db.Column(db.String)
-    extraction_config = db.Column(db.String)
+    config = db.Column(db.JSON, nullable=False, default={})
     original_images = db.relationship('OriginalImageModel', backref='dataset', lazy=True, cascade='all,delete')
     classificators = db.relationship('ClassificatorModel', backref='dataset', lazy=True)
     known_characters = db.Column(db.String)

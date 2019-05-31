@@ -16,6 +16,8 @@ from captchabreaker.models import DatasetModel
 class CaptchaDecoder:
 
     def __init__(self, image, classificator):
+        print("FOO")
+        print(image.shape)
         self.image = image
         self.classificator = classificator
         if self.classificator is None:
@@ -26,7 +28,7 @@ class CaptchaDecoder:
         return self.recognize_characters(self.extract_characters())
 
     def extract_characters(self):
-        operations = parse_operations(json.loads(re.sub("'", '"', self.dataset.extraction_config)))
+        operations = parse_operations(self.dataset.config)
         datasetExtractor = DatasetExtractor(None, operations, None, self.dataset.characters_per_image, None)
         return datasetExtractor.process_file(self.image)
 
@@ -35,7 +37,8 @@ class CaptchaDecoder:
         path = os.path.join(MODEL_DIRECTORY, self.classificator.task_id)
         cnn.load_state_dict(torch.load(path))
         characters = np.array(characters)
-        characters = torch.from_numpy((characters.astype(dtype=np.float32) / 255).reshape([5, 1, 20, 20]))
+        print(characters.shape)
+        characters = torch.from_numpy((characters.astype(dtype=np.float32) / 255).reshape([self.dataset.characters_per_image, 1, 20, 20]))
         data = Variable(characters)
         cnn.eval()
         output = cnn(data)

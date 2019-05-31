@@ -1,7 +1,5 @@
 from .AbstractParserOperation import AbstractParserOperation
 from captchabreaker.image_processing.operations.parameters.Integer import Integer
-import cv2
-import numpy as np
 
 
 class Crop(AbstractParserOperation):
@@ -17,6 +15,6 @@ class Crop(AbstractParserOperation):
     def apply(self, image):
         image = image.copy()
         height, width = image.shape[:2]
-        size = self.size.value
-        cropped = image[size:(height - size), size:(width - size)]  # [y: y + h, x: x + w]
+        crop_size = self.size.value
+        cropped = image[crop_size:(height - crop_size), crop_size:(width - crop_size)]  # [y: y + h, x: x + w]
         return cropped

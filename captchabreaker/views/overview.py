@@ -25,11 +25,11 @@ def index():
 @blueprint.route('/task_status/<classificator_id>')
 @login_required
 def taskstatus(classificator_id):
-    task = ClassificatorModel.query.get(classificator_id).task
-    info_dict = task.info or {}
-    return jsonify({'state': task.state,
+    classificator = ClassificatorModel.query.get(classificator_id)
+    info_dict = classificator.task.info or {}
+    return jsonify({'state': classificator.task.state,
                     'current_iteration': info_dict.get('current_iteration', 0),
-                    'max_iterations': info_dict.get('max_iterations', 1),
+                    'max_iterations': classificator.config['iterations'],
                     'status': str(info_dict),
                     'loss': info_dict.get('loss', 0),
                     'result': info_dict.get('result', '')})

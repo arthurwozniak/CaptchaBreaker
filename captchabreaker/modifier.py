@@ -66,7 +66,6 @@ def contours_to_boxes(contours):
 
 def remove_overlapping_boxes(boxes, count):
     print("removing")
-    #         boxes.append([x, y, w, h])
     while (len(boxes) > count):
         # print(boxes)
         areas = [intersection(boxes[i], boxes[i + 1]) for i in range(len(boxes) - 1)]
@@ -93,27 +92,6 @@ def bin_to_img(data):
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
     return img
 
-
-def img_grayscale(image):
-    image = image.copy()
-    grayscaled = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-    return grayscaled
-
-
-def img_treshhold(image):
-    image = image.copy()
-    tresholded = cv2.threshold(
-        image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
-    tresholded = cv2.bitwise_not(tresholded)
-    return tresholded
-
-
-def img_filter(image, lower=0, upper=0):
-    image = image.copy()
-    filtered = cv2.inRange(image, np.array([lower]), np.array([upper]))
-    return filtered
-
-
 def img_unmask(image, count, onlyLetters=False):
     image = image.copy()
     contours = get_contours(image.copy())
@@ -135,6 +113,7 @@ def img_unmask(image, count, onlyLetters=False):
     # Zakreslíme ohraničující čtverce
     image_bordered = cv2.cvtColor(image.copy(), cv2.COLOR_GRAY2RGB)
     letters = get_letters(image, boxes)
+    print("EHER")
 
     rects = []
 

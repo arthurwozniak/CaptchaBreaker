@@ -8,6 +8,7 @@ from captchabreaker.image_processing import helper
 from captchabreaker.models import DatasetModel, db, OriginalImageModel, CharacterModel
 import base64
 import io
+import pprint
 import random
 
 blueprint = get_blueprint_for(DatasetModel)
@@ -51,7 +52,7 @@ def show(id):
     if dataset is None:
         return redirect(url_for('admin.datasets'))
     images_count = len(dataset.original_images)
-    return render_template('datasets/show.html', dataset=dataset, images_count=images_count)
+    return render_template('datasets/show.html', dataset=dataset, images_count=images_count, config=pprint.pformat(dataset.config))
 
 
 @blueprint.route('/<int:dataset_id>/image/<int:image_id>/')
@@ -82,11 +83,11 @@ def character(dataset_id, character_id):
 @login_required
 def preview():
     operations = helper.parse_operations(request.json.get('operations', []))
-    encoded_image = request.json.get("image")
+    image_encoded = request.json.get("image")
 
-    last_img = modifier.blob_to_img(encoded_image)
+    image_input = modifier.blob_to_img(image_encoded)
 
-    images = [last_img]
+    images = [image_input]
     for op in operations:
         images.append(op.apply(images[-1]))
     images.append(modifier.img_unmask(images[-1], request.json.get('count')))

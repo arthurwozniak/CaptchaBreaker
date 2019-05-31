@@ -24,12 +24,9 @@ class DatasetExtractor:
         items = self.zip.infolist()
         archive_data = []
 
-        print(items)
-        i=0
-        for item in items:
+        for i, item in enumerate(items):
             if item.is_dir():
                 continue
-            i+=1
             name = self.labels[item.filename] if self.labels else basename(item.filename).split(".")[0]
             if len(name) != self.count:
                 print("Invalid name length")
@@ -41,6 +38,7 @@ class DatasetExtractor:
             raw_image = self.zip.read(item)
             image_data["image"] = base64.b64encode(raw_image).decode()
             characters = self.process_file(modifier.bin_to_img(raw_image))
+            if self.count != len(characters): continue
             for character_data, character_str in zip(characters, name):
                 char_dict.append((character_str, character_data))
             image_data["characters"] = char_dict
@@ -67,8 +65,6 @@ class DatasetExtractor:
 
         archive_data = self.process_zip()
 
-        print("dsgsdgsdgsdg")
-
         for captcha in archive_data:
             image = OriginalImageModel(text=captcha["name"], data=captcha["image"], dataset=dataset)
             known.update(set(list(captcha["name"])))
@@ -80,7 +76,7 @@ class DatasetExtractor:
                 image.characters.append(character)
             dataset.original_images.append(image)
         dataset.known_characters = "".join(sorted(list(known)))
-        dataset.extraction_config = str(self.operations_json)
+        dataset.config = self.operations_json
         db.session.add(dataset)
         db.session.commit()
 

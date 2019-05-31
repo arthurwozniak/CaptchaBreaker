@@ -24,14 +24,13 @@ def new():
 
 
 def create():
-    from captchabreaker.tasks.process_dataset import training_task
-    params = classificator_parameters_from(request)
-    print(params)
-    classificator = ClassificatorModel(name=params['name'], dataset_id=params['dataset_id'], is_finished=False, config=params)
+    from captchabreaker.tasks.training_task import training_task
+    params = __classificator_parameters_from(request)
+    classificator = ClassificatorModel(name=params['name'], dataset_id=params['dataset_id'], is_finished=False,
+                                       config=params)
     db.session.add(classificator)
     db.session.commit()
-    task = training_task.delay(classificator.id)
-    # TODO: fix celery communication
+    training_task.delay(classificator.id)
     return redirect(url_for('dashboard.overview.index'))
 
 
@@ -54,7 +53,7 @@ def delete(id):
     return redirect(url_for('dashboard.classificators.index'))
 
 
-def classificator_parameters_from(request):
+def __classificator_parameters_from(request):
     return {
         'name': request.form.get('name'),
         'dataset_id': request.form.get('dataset', default=0, type=int),
