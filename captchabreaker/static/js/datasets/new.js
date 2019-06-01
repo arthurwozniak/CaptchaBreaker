@@ -319,7 +319,7 @@ function jsonifyOperation(node) {
     obj = {};
     obj.class = node.getAttribute('data-class');
     obj.name = node.getAttribute('data-name');
-    obj.value = node.value;
+    obj[node.getAttribute('data-type')] = node.value;
     return obj;
 }
 
@@ -332,11 +332,13 @@ function jsonifyOperations() {
     var index;
     console.log(opsHTML);
     for (index = 0; index < opsHTML.length; index++) {
+        console.log("element")
+        console.log()
         obj = {};
         opsList.push(obj);
         node = opsHTML[index];
         obj.class = node.getAttribute('data-class');
-        var inputs = node.getElementsByTagName('input');
+        var inputs = node.getElementsByClassName('form-control');
         if (inputs.length === 0) {
             continue;
         }
@@ -472,26 +474,6 @@ function submit() {
         false,
     );
     r.readAsDataURL(fileInput.prop('files')[0]);
-}
-
-function showFilterRange() {
-    console.log('Filter checkbox clicked');
-    if ($('#checkbox-filter-range').is(':checked')) {
-        $('#step-3-filter-range').prop('hidden', false);
-    } else {
-        $('#step-3-filter-range').prop('hidden', true);
-    }
-    fileSelectChanged();
-}
-
-function filterChangedUpper() {
-    console.log('Filter upper bound changed');
-    fileSelectChanged();
-}
-
-function filterChangedLower() {
-    console.log('Filter lower bound changed');
-    fileSelectChanged();
 }
 
 function charactersCountChanged() {

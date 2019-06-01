@@ -10,5 +10,5 @@ class Opening(AbstractMorphologicalOperation):
 
     def apply(self, image):
         image = image.copy()
-        kernel = np.ones((int(self.kernel_size), int(self.kernel_size)), np.uint8)
+        kernel = self.__structure_element__()
         return cv2.morphologyEx(image, cv2.MORPH_OPEN, kernel)

@@ -5,7 +5,7 @@ from .Grayscale import Grayscale
 from .Opening import Opening
 from .ThresholdCustom import ThresholdCustom
 from .ThresholdOtsu import ThresholdOtsu
-from captchabreaker.image_processing.operations.parameters.Integer import Integer
+from captchabreaker.image_processing.operations.parameters import Integer, KernelShape
 from .Inverse import Inverse
 from .Crop import Crop
 from .AreaFilter import AreaFilter
@@ -27,4 +27,4 @@ def operations():
     return sorted(operations, key=attrgetter('_custom_name'))
 
 def parameters():
-    return [Integer()]
+    return [Integer(), KernelShape()]

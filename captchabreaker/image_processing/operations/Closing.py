@@ -2,8 +2,8 @@ from .AbstractMorphologicalOperation import AbstractMorphologicalOperation
 import numpy as np
 import cv2
 
-class Closing(AbstractMorphologicalOperation):
 
+class Closing(AbstractMorphologicalOperation):
     _custom_name = "Morphological closing"
 
     def __init__(self):
@@ -11,5 +11,5 @@ class Closing(AbstractMorphologicalOperation):
 
     def apply(self, image):
         image = image.copy()
-        kernel = np.ones((int(self.kernel_size), int(self.kernel_size)), np.uint8)
+        kernel = self.__structure_element__()
         return cv2.morphologyEx(image, cv2.MORPH_CLOSE, kernel)

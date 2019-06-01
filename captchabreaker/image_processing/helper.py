@@ -7,6 +7,8 @@ def parse_args(args_json):
         arg = find_parameter(arg_json.get("class", None))
         if 'value' in arg_json.keys():
             arg.__setattr__('value', int(arg_json.get('value', 0)))
+        elif 'type' in arg_json.keys():
+            arg.__setattr__('type', str(arg_json.get('type')))
         args[arg_json.get('name')] = arg
     return args
 

@@ -7,7 +7,8 @@ class AbstractParserOperation(object):
 
     @property
     def desc(self):
-        return "Description " + self._custom_name
+        #return "Description " + self._custom_name
+        return ''
 
     def __init__(self):
         return

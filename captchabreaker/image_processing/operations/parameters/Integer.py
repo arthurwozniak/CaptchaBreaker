@@ -5,7 +5,7 @@ class Integer:
 
     _html_pattern = \
     """<label for="{4}">{5}</label> 
-    <input class="form-control" type="number" data-class="{0}" data-name="{5}" min="{1}" max="{2}" value="{3}" onChange="fileSelectChanged()">"""
+    <input class="form-control" type="number" id="{4}" data-class="{0}" data-name="{5}" data-type="value" min="{1}" max="{2}" value="{3}" onChange="fileSelectChanged()">"""
 
 
     def __init__(self, value=0, min=0, max=255, name="variable"):
