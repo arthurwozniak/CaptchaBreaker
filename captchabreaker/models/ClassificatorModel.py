@@ -11,6 +11,7 @@ class ClassificatorModel(db.Model):
     is_finished = db.Column(db.Boolean, default=False, nullable=False)
     dataset_id = db.Column(db.Integer, db.ForeignKey('datasets.id'), nullable=False)
     config = db.Column(db.JSON, nullable=False, default={})
+    queries = db.relationship('QueryModel', backref='classificator', lazy=True, cascade="all, delete")
 
     def __repr__(self):
         return "<ClassificatorModel %s>" % self.name

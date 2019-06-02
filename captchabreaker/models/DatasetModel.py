@@ -7,7 +7,7 @@ class DatasetModel(db.Model):
     name = db.Column(db.String)
     config = db.Column(db.JSON, nullable=False, default={})
     original_images = db.relationship('OriginalImageModel', backref='dataset', lazy=True, cascade='all,delete')
-    classificators = db.relationship('ClassificatorModel', backref='dataset', lazy=True)
+    classificators = db.relationship('ClassificatorModel', backref='dataset', lazy=True, cascade="all, delete")
     known_characters = db.Column(db.String)
     characters_per_image = db.Column(db.Integer)
 
