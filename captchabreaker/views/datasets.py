@@ -52,7 +52,7 @@ def show(id):
     if dataset is None:
         return redirect(url_for('admin.datasets'))
     images_count = len(dataset.original_images)
-    return render_template('datasets/show.html', dataset=dataset, images_count=images_count, config=pprint.pformat(dataset.config))
+    return render_template('datasets/show.html', dataset=dataset, images_count=images_count)
 
 
 @blueprint.route('/<int:dataset_id>/image/<int:image_id>/')

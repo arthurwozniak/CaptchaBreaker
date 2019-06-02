@@ -1,6 +1,7 @@
 from flask import g
 from flask import render_template, request, redirect, url_for, jsonify
 from flask_simplelogin import login_required
+import pprint
 
 from captchabreaker.models import ClassificatorModel, DatasetModel, db
 from .helper import *
@@ -57,6 +58,7 @@ def __classificator_parameters_from(request):
     return {
         'name': request.form.get('name'),
         'dataset_id': request.form.get('dataset', default=0, type=int),
-        'accuracy': request.form.get('accuracy', default=0, type=int),
-        'iterations': request.form.get('max-iterations', default=20, type=int)
+        'iterations': request.form.get('max-iterations', default=20, type=int),
+        'learning_rate': request.form.get('learning-rate', default=1, type=float),
+        'momentum': request.form.get('momentum', default=1, type=float)
     }

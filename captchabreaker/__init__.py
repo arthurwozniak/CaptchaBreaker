@@ -3,7 +3,7 @@ from flask_simplelogin import SimpleLogin
 
 import captchabreaker.modifier
 from captchabreaker import config
-from captchabreaker.views.helper import parse_operations, title_generator, is_current_blueprint
+from captchabreaker.views.helper import parse_operations, title_generator, is_current_blueprint, pretty_print
 from captchabreaker.image_processing.dataset_extractor import DatasetExtractor
 from captchabreaker.image_processing.classificators import CNN
 from captchabreaker.models import db, ClassificatorModel, DatasetModel, QueryModel
@@ -18,6 +18,7 @@ app.url_map.strict_slashes = False
 SimpleLogin(app)
 app.jinja_env.globals.update(title_generator=title_generator)
 app.jinja_env.globals.update(is_current_blueprint=is_current_blueprint)
+app.jinja_env.globals.update(pretty_print=pretty_print)
 app.jinja_env.filters['datetime'] = format_datetime
 
 set_file_logger(app)

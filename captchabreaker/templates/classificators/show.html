@@ -21,6 +21,8 @@
         </div>
     </div>
     <hr>
+    <h4 class="mt-3">Config</h4>
+    <pre>{{pretty_print(classificator.config)}}</pre>
 
     <form method='post' class="" action="{{url_for('dashboard.classificators.delete', id=classificator.id)}}">
         <input type='submit' value='Delete' class="btn btn-danger mt-3">

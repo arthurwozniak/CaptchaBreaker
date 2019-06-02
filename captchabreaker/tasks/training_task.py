@@ -10,7 +10,7 @@ from sqlalchemy.orm.attributes import flag_modified
 
 from captchabreaker import celery, app
 from captchabreaker.image_processing.classificators import CNN
-from captchabreaker.image_processing.dataset import CaptchaBreakerDataset
+from captchabreaker.image_processing.classificators.dataset import CaptchaBreakerDataset
 from captchabreaker.models import DatasetModel, ClassificatorModel, db
 
 
@@ -20,16 +20,16 @@ def training_task(self, classificator_id):
     cnn, optimizer, data_loader = __initialize_network(classificator)
     cnn.train()
 
-    last_loss, current_accuracy, current_iteration = 0, 0, 0
-    target_accuracy, target_iterations = classificator.config['accuracy'], classificator.config['iterations']
+    losses = []
+    last_loss = 0
 
-    while (current_accuracy < target_accuracy) and (current_iteration < target_iterations):
+    for current_iteration in range(classificator.config['iterations']):
         last_loss = __make_step(cnn, data_loader, optimizer)
-        current_iteration += 1
+        losses.append(last_loss)
         __update_task_state(self, states.STARTED, current_iteration, last_loss)
 
     __update_task_state(self, states.SUCCESS, current_iteration, last_loss)
-    __store_result(self, cnn, classificator, current_iteration, last_loss)
+    __store_result(self, cnn, classificator, losses)
 
 
 def __load_classificator(task, classificator_id):
@@ -45,12 +45,10 @@ def __initialize_network(classificator):
     train_dataset = CaptchaBreakerDataset(dataset)
     data_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
 
-    target_accuracy = classificator.config['accuracy']
-    target_iterations = classificator.config['iterations']
     # model of cnn
     cnn = CNN(len(dataset.known_characters))
     # standard gradient decent (defining the learning rate and momentum)
-    optimizer = optim.SGD(cnn.parameters(), lr=0.01, momentum=0.9)
+    optimizer = optim.SGD(cnn.parameters(), lr=classificator.config['learning_rate'], momentum=classificator.config['momentum'])
 
     return cnn, optimizer, data_loader
 
@@ -72,10 +70,9 @@ def __update_task_state(task, status, iteration, loss):
                  meta={'current_iteration': iteration, 'loss': loss})
 
 
-def __store_result(task, cnn, classificator, iteration, accuracy):
+def __store_result(task, cnn, classificator, losses):
     torch.save(cnn.state_dict(), os.path.join(app.config['MODEL_DIRECTORY'], task.request.id))
     classificator.is_finished = True
-    classificator.config['accuracy_final'] = accuracy
-    classificator.config['iterations_final'] = iteration
+    classificator.config['losses'] = losses
     flag_modified(classificator, 'config')
     db.session.commit()

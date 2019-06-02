@@ -30,7 +30,10 @@ class DatasetExtractor:
             name = self.labels[item.filename] if self.labels else basename(item.filename).split(".")[0]
             if len(name) != self.count:
                 print("Invalid name length")
-                raise Exception("Length of label `{0}` ({1}) does not match count of characters in CAPTCHA ({2}).".format(name, len(name), self.count))
+                raise Exception(
+                    "Length of label `{0}` ({1}) does not match count of characters in CAPTCHA ({2}).".format(name,
+                                                                                                              len(name),
+                                                                                                              self.count))
             print(name, i)
             image_data = {}
             char_dict = []
@@ -53,7 +56,6 @@ class DatasetExtractor:
         result = modifier.img_unmask(images[-1], self.count, onlyLetters=True)
         return result
 
-
     def perform(self):
         from captchabreaker.models import db
         import cv2
@@ -69,10 +71,10 @@ class DatasetExtractor:
             image = OriginalImageModel(text=captcha["name"], data=captcha["image"], dataset=dataset)
             known.update(set(list(captcha["name"])))
             for character_tuple in captcha["characters"]:
-                #print("tuple ", character_tuple)
                 character_image = cv2.imencode('.bmp', character_tuple[1])[1].tostring()
                 character_image = base64.b64encode(character_image).decode()
-                character = CharacterModel(character=character_tuple[0], data=character_tuple[1], original=image, image=character_image)
+                character = CharacterModel(character=character_tuple[0], data=character_tuple[1], original=image,
+                                           image=character_image)
                 image.characters.append(character)
             dataset.original_images.append(image)
         dataset.known_characters = "".join(sorted(list(known)))

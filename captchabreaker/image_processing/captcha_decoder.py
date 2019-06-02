@@ -1,6 +1,4 @@
-import json
 import os
-import re
 
 import numpy as np
 import torch
@@ -16,8 +14,6 @@ from captchabreaker.models import DatasetModel
 class CaptchaDecoder:
 
     def __init__(self, image, classificator):
-        print("FOO")
-        print(image.shape)
         self.image = image
         self.classificator = classificator
         if self.classificator is None:
