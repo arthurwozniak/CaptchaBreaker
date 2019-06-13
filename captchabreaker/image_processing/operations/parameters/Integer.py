@@ -4,8 +4,8 @@ import uuid
 class Integer:
 
     _html_pattern = \
-    """<label for="{4}">{5}</label> 
-    <input class="form-control" type="number" id="{4}" data-class="{0}" data-name="{5}" data-type="value" min="{1}" max="{2}" value="{3}" onChange="fileSelectChanged()">"""
+    """<div class="col-md-6"><label for="{4}">{5}</label></div> 
+    <div class="col-md-6"><input class="form-control" type="number" id="{4}" data-class="{0}" data-name="{5}" data-type="value" min="{1}" max="{2}" value="{3}" onChange="fileSelectChanged()"></div>"""
 
 
     def __init__(self, value=0, min=0, max=255, name="variable"):

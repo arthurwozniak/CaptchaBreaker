@@ -20,10 +20,10 @@
 
                 <ul id="operationListAvailable" class="list-group">
                     {% for operation in operations %}
-                    <li class="list-group-item" data-class="{{operation.__class__.__name__}}">{{operation.name}}
-                        <div class="details" hidden>
-                            {{operation.desc}} <i class="js-remove">✖</i><br>
-                            {{operation.arg_html() | safe}}
+                    <li class="list-group-item" data-class="{{operation.__class__.__name__}}">
+                        <div class="row">{{operation.name}}<i class="js-remove" hidden>✖</i></div>
+                        <div class="details col-md-12" hidden>
+                            <div class="row">{{operation.arg_html() | safe}}</div>
                         </div>
                     </li>
 

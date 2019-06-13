@@ -53,8 +53,8 @@ class DatasetExtractor:
         images = [last_img]
         for op in self.operations:
             images.append(op.apply(images[-1]))
-        result = modifier.img_unmask(images[-1], self.count, onlyLetters=True)
-        return result
+        boxes = modifier.find_boxes(images[-1], self.count)
+        return modifier.get_letters(images[-1], boxes)
 
     def perform(self):
         from captchabreaker.models import db

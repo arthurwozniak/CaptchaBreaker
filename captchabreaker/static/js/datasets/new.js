@@ -373,6 +373,7 @@ var filterOperations = Sortable.create(operationListSelected, {
     onAdd: function(evt) {
         console.log('onAdd.foo:', [evt.item, evt.from]);
         $('.details', evt.item)[0].hidden = false;
+        $('.js-remove', evt.item)[0].hidden = false;
     },
     onSort: function(evt) {
         console.log('onUpdate');

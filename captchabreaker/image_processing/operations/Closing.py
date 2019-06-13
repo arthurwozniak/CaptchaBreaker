@@ -1,5 +1,4 @@
 from .AbstractMorphologicalOperation import AbstractMorphologicalOperation
-import numpy as np
 import cv2
 
 
@@ -12,4 +11,4 @@ class Closing(AbstractMorphologicalOperation):
     def apply(self, image):
         image = image.copy()
         kernel = self.__structure_element__()
-        return cv2.morphologyEx(image, cv2.MORPH_CLOSE, kernel)
+        return cv2.morphologyEx(image, cv2.MORPH_CLOSE, kernel, iterations=self.__get_iterations__())

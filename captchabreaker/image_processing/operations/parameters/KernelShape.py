@@ -9,12 +9,12 @@ class KernelShape:
              'MORPH_ELLIPSE': MORPH_ELLIPSE}
 
 
-    _html_pattern = """<label for="{1}">{2}</label> 
-    <select class="form-control" id="{1}" data-class="{0}" data-name="{2}" data-type="type" onChange="fileSelectChanged()">
+    _html_pattern = """<div class="col-md-6"><label for="{1}">{2}</label></div> 
+    <div class="col-md-6"><select class="form-control" id="{1}" data-class="{0}" data-name="{2}" data-type="type" onChange="fileSelectChanged()">
     <option value="MORPH_RECT">square</option>
     <option value="MORPH_ELLIPSE">circle</option>
     <option value="MORPH_CROSS">cross</option>    
-    </select>"""
+    </select></div>"""
 
 
     def __init__(self, name="variable", type="MORPH_RECT"):

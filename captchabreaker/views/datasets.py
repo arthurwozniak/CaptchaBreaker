@@ -90,7 +90,8 @@ def preview():
     images = [image_input]
     for op in operations:
         images.append(op.apply(images[-1]))
-    images.append(modifier.img_unmask(images[-1], request.json.get('count')))
+    boxes = modifier.find_boxes(images[-1], request.json.get('count'))
+    images.append(modifier.draw_boxes(images[-1], boxes))
     result_images = [modifier.img_to_base64(img) for img in images[1:]]
     names = [op.__class__.__name__ for op in operations]
     names.append("Extracted")

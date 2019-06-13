@@ -12,4 +12,4 @@ class Erosion(AbstractMorphologicalOperation):
     def apply(self, image):
         image = image.copy()
         kernel = self.__structure_element__()
-        return cv2.erode(image, kernel, iterations=1)
+        return cv2.erode(image, kernel, iterations=self.__get_iterations__())

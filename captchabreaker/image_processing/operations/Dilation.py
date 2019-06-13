@@ -12,4 +12,4 @@ class Dilation(AbstractMorphologicalOperation):
     def apply(self, image):
         image = image.copy()
         kernel = self.__structure_element__()
-        return cv2.dilate(image, kernel, iterations=1)
+        return cv2.dilate(image, kernel, iterations=self.__get_iterations__())

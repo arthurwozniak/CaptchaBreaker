@@ -11,4 +11,4 @@ class Opening(AbstractMorphologicalOperation):
     def apply(self, image):
         image = image.copy()
         kernel = self.__structure_element__()
-        return cv2.morphologyEx(image, cv2.MORPH_OPEN, kernel)
+        return cv2.morphologyEx(image, cv2.MORPH_OPEN, kernel, iterations=self.__get_iterations__())
