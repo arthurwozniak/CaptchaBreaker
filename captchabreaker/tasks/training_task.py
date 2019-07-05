@@ -11,6 +11,7 @@ from sqlalchemy.orm.attributes import flag_modified
 from captchabreaker import celery, app
 from captchabreaker.image_processing.classificators import CNN
 from captchabreaker.image_processing.classificators.dataset import CaptchaBreakerDataset
+from captchabreaker.image_processing.classificators.verificator import Verificator
 from captchabreaker.models import DatasetModel, ClassificatorModel, db
 
 
@@ -28,8 +29,9 @@ def training_task(self, classificator_id):
         losses.append(last_loss)
         __update_task_state(self, states.STARTED, current_iteration, last_loss)
 
+    validation_results = __validate(self, classificator)
     __update_task_state(self, states.SUCCESS, current_iteration, last_loss)
-    __store_result(self, cnn, classificator, losses)
+    __store_result(self, cnn, classificator, losses, validation_results)
 
 
 def __load_classificator(task, classificator_id):
@@ -45,10 +47,9 @@ def __initialize_network(classificator):
     train_dataset = CaptchaBreakerDataset(dataset)
     data_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
 
-    # model of cnn
     cnn = CNN(len(dataset.known_characters))
-    # standard gradient decent (defining the learning rate and momentum)
-    optimizer = optim.SGD(cnn.parameters(), lr=classificator.config['learning_rate'], momentum=classificator.config['momentum'])
+    optimizer = optim.SGD(cnn.parameters(), lr=classificator.config['learning_rate'],
+                          momentum=classificator.config['momentum'])
 
     return cnn, optimizer, data_loader
 
@@ -70,9 +71,17 @@ def __update_task_state(task, status, iteration, loss):
                  meta={'current_iteration': iteration, 'loss': loss})
 
 
-def __store_result(task, cnn, classificator, losses):
+def __store_result(task, cnn, classificator, losses, validation_results):
     torch.save(cnn.state_dict(), os.path.join(app.config['MODEL_DIRECTORY'], task.request.id))
     classificator.is_finished = True
     classificator.config['losses'] = losses
+    classificator.config['cross_validation_results'] = validation_results
     flag_modified(classificator, 'config')
     db.session.commit()
+
+
+def __validate(task, classificator):
+    if classificator.config['cross_validation'] is None or classificator.config['cross_validation'] <= 1:
+        return []
+    __update_task_state(task, states.RECEIVED, 0, 0)
+    return Verificator(classificator.id).perform()

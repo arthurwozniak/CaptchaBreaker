@@ -14,10 +14,7 @@
             Dataset: <a href="{{url_for('dashboard.datasets.show', id=classificator.dataset_id)}}">{{classificator.dataset.name}}</a>
         </div>
         <div class="col">
-            Loss:
-        </div>
-        <div class="col">
-            Status:
+            Task status: {{classificator.task.state}}
         </div>
     </div>
     <hr>

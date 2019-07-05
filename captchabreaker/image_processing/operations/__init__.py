@@ -9,6 +9,7 @@ from captchabreaker.image_processing.operations.parameters import Integer, Kerne
 from .Inverse import Inverse
 from .Crop import Crop
 from .AreaFilter import AreaFilter
+from .Scale import Scale
 
 from operator import attrgetter
 
@@ -23,7 +24,8 @@ def operations():
                   ThresholdOtsu(),
                   ThresholdCustom(),
                   Crop(),
-                  AreaFilter()]
+                  AreaFilter(),
+                  Scale()]
     return sorted(operations, key=attrgetter('_custom_name'))
 
 def parameters():

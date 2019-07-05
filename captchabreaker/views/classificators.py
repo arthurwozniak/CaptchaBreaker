@@ -12,7 +12,7 @@ blueprint = get_blueprint_for(ClassificatorModel)
 @blueprint.route('/')
 @login_required
 def index():
-    classificators = ClassificatorModel.query.all()
+    classificators = ClassificatorModel.query.order_by(ClassificatorModel.id).all()
     return render_template('classificators/index.html', classificators=classificators)
 
 
@@ -60,5 +60,6 @@ def __classificator_parameters_from(request):
         'dataset_id': request.form.get('dataset', default=0, type=int),
         'iterations': request.form.get('max-iterations', default=20, type=int),
         'learning_rate': request.form.get('learning-rate', default=1, type=float),
-        'momentum': request.form.get('momentum', default=1, type=float)
+        'momentum': request.form.get('momentum', default=1, type=float),
+        'cross_validation': request.form.get('cross-validation', default=1, type=int)
     }

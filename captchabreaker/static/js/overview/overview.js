@@ -6,7 +6,7 @@ function classificatorTaskStatus(id, status_elem) {
     dataType: 'html',
     contentType: 'application/json;charset=UTF-8',
     success: function(ajax_result) {
-      var text;
+      var result;
       result = JSON.parse(ajax_result);
       switch (result.state) {
         case 'FAILURE':
@@ -18,15 +18,11 @@ function classificatorTaskStatus(id, status_elem) {
         case 'SUCCESS':
           status_elem.closest('.classificator-training').remove();
           break;
+        case 'RECEIVED':
+          status_elem.text('VALIDATING: n-fold validation in progress...');
+          break;
         default:
-          text =
-            'TRAINING: ' +
-            result.current_iteration +
-            '/' +
-            result.max_iterations +
-            ', loss: ' +
-            result.loss;
-          status_elem.text(text);
+          status_elem.text(trainingStatusMessage(result));
       }
     },
     error: function() {
@@ -35,12 +31,20 @@ function classificatorTaskStatus(id, status_elem) {
   });
 }
 
+function trainingStatusMessage(result) {
+  var message =
+    'TRAINING: ' +
+    result.current_iteration +
+    '/' +
+    result.max_iterations +
+    ', loss: ' +
+    result.loss;
+  return message;
+}
+
 function updateStatus() {
-  $('.classificator-training').each(function(elem) {
-    status = classificatorTaskStatus(
-      $(this).data('id'),
-      $(this).find('.status'),
-    );
+  $('.classificator-training').each(function() {
+    classificatorTaskStatus($(this).data('id'), $(this).find('.status'));
   });
 }
 

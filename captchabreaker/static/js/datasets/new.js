@@ -31,10 +31,14 @@ function nextStep() {
         $('#step-' + step).hide();
         step++;
         $('#step-' + step).show();
-        if (step === totalSteps) {
-            $('#step-next').hide();
-            fileSelectChanged();
-        }
+        verifyFinalStep();
+    }
+}
+
+function verifyFinalStep(){
+    if (step === totalSteps) {
+        $('#step-next').hide();
+        fileSelectChanged();
     }
 }
 
@@ -161,7 +165,7 @@ function labelingValidateButtons() {
         return;
     }
 
-    if (labelsPos >= labelsTotal - 1) {
+    if (labelsPos >= labelsTotal) {
         btnLabelingNext.toggleClass('disabled', true);
         //$("#btn-labeling-done").prop("hidden", false)
         return;
@@ -177,7 +181,7 @@ function labelingImageForCurrentPos() {
         return;
     }
     model.getBlobFromEntry(Object.values(archiveEntries)[labelsPos], function(
-        blob,
+        blob
     ) {
         console.log(blob);
         var imageUrl = URL.createObjectURL(blob);
@@ -187,7 +191,7 @@ function labelingImageForCurrentPos() {
 
 function labelingImageNext() {
     console.log('next image');
-    if (labelsPos >= labelsTotal - 1) {
+    if (labelsPos >= labelsTotal) {
         console.log("Can't go forward");
         return;
     }
@@ -198,7 +202,9 @@ function labelingImageNext() {
         return;
     }
     labels[Object.keys(archiveEntries)[labelsPos]] = $('#text-captcha').val();
-    labelsPos += 1;
+    if (labelsPos < labelsTotal - 1) {
+        labelsPos += 1;
+    }
     labelingValidateButtons();
     labelingImageForCurrentPos();
     $('#text-captcha').val(labels[Object.keys(archiveEntries)[labelsPos]]);
@@ -332,8 +338,6 @@ function jsonifyOperations() {
     var index;
     console.log(opsHTML);
     for (index = 0; index < opsHTML.length; index++) {
-        console.log("element")
-        console.log()
         obj = {};
         opsList.push(obj);
         node = opsHTML[index];

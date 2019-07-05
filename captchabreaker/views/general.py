@@ -23,7 +23,7 @@ def internal_server_error(error):
     return render_template('errors/500.html'), 500
 
 
-@blueprint.app_errorhandler(Exception)
+#@blueprint.app_errorhandler(Exception)
 def unhandled_exception(error):
     current_app.logger.error('Unhandled Exception: %s', (error))
     return render_template('errors/500.html'), 500

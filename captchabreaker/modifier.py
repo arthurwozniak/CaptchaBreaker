@@ -4,6 +4,42 @@ import numpy as np
 import base64
 
 
+def split_joined_boxes(image, boxes, count):
+    number_of_splits = count - len(boxes)
+    minimas = find_minimas(image)
+    splits_values = sorted(calculate_boxes_splits(boxes, minimas), key=lambda box: box['cut_value'])
+    return map(lambda box: box['minimum'], splits_values[0:number_of_splits + 1])
+
+def calculate_boxes_splits(boxes, minimas):
+    result = []
+    for minimum in minimas:
+        box = select_box(boxes, minimum['x'])
+        if box is None:
+            continue
+        else:
+            result.append({'box': box, 'minimum': minimum})
+
+    return calculate_cut_values(result)
+
+def calculate_cut_values(result):
+    for box in result:
+        box['cut_value'] = ((box['minimum']['x'] - box['box'][0]) - ((box['box'][0] + box['box'][2]) - box['minimum']['x'])) / 2
+    return result
+
+
+def select_box(boxes, x):
+    for box in boxes:
+        if (box[0] < x) and (x < (box[0] + box[2])):
+            return box
+
+
+# returns list of tuples [x-position, projection-size]
+def find_minimas(image):
+    projection = np.sum(image, axis=0) / 255
+    minimas = np.r_[True, projection[1:] < projection[:-1]] & np.r_[projection[:-1] < projection[1:], True]
+    return [{'x': x, 'projection': projection[x]} for x in range(len(minimas)) if minimas[x] and (projection[x] < 10)]
+
+
 # Old code, should be reviewed
 def split_joined_characters(image, boxes):
     projection = np.sum(image, axis=0) / 255
@@ -41,11 +77,7 @@ def get_contours(image):
     contours, hierarchy = cv2.findContours(
         image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-    # Odstraníme malé plochy představující šum nebo "kousky" číslic
-    contours_filtered = [c for c in contours if cv2.contourArea(c) >= 5]
-
-    # print("Počet ploch: %d" % len(contours_filtered))
-    return contours_filtered
+    return contours
 
 
 def contours_to_boxes(contours):
@@ -54,9 +86,7 @@ def contours_to_boxes(contours):
 
 def remove_overlapping_boxes(boxes, count):
     while (len(boxes) > count):
-        # print(boxes)
         areas = [intersection(boxes[i], boxes[i + 1]) for i in range(len(boxes) - 1)]
-        # print(areas)
         i = areas.index(max(areas, key=lambda x: x[2] * x[3]))
         r1 = boxes[i]
         r2 = boxes[i + 1]
@@ -66,6 +96,11 @@ def remove_overlapping_boxes(boxes, count):
         else:
             boxes.pop(i)
     return boxes
+
+
+# box has structure (x-offset, y-offset, width, height)
+def select_biggest_areas(boxes, count):
+    return sorted(boxes, key=lambda box: box[2] * box[3])[-count:]
 
 
 def blob_to_img(data):
@@ -80,8 +115,42 @@ def bin_to_img(data):
     return img
 
 
-def find_boxes(image, lettersCount):
+def find_contours(image, count):
+    boxes = contours_to_boxes(get_contours(image))
+
+    if len(boxes) < count:
+        for minimum in split_joined_boxes(image, boxes, count):
+            cv2.line(image, (minimum['x'], 0), (minimum['x'], image.shape[1]), (0, 0, 0), 1)
+    boxes = contours_to_boxes(get_contours(image))
+    boxes = select_biggest_areas(boxes, count)
+
+    return sorted(boxes, key=lambda box: box[0])
+
+
+def find_boxes(image, count):
+    return find_contours(image, count)
     contours = get_contours(image)
+    if len(contours) > count:
+        contours = select_biggest_areas(contours, count)
+
+    boxes = contours_to_boxes(contours)
+
+    if len(boxes) < count:
+        res = split_joined_characters(image, boxes)
+        for i in res:
+            cv2.line(image, (i[0], 0), (i[0], image.shape[1]), (0, 0, 0), 1)
+        contours = get_contours(image.copy())
+        boxes = contours_to_boxes(contours)
+
+    return boxes
+
+
+def find_boxes_old(image, lettersCount):
+    contours = get_contours(image)
+
+    if len(contours) > lettersCount:
+        select_biggest_areas(contours, lettersCount)
+
     boxes = contours_to_boxes(contours)
 
     if len(boxes) > lettersCount:

@@ -17,7 +17,5 @@ class ThresholdCustom(AbstractParserOperation):
 
     def apply(self, image):
         image = image.copy()
-        print(self.lower_bound)
-        print(type(self.lower_bound))
         tresholded = cv2.inRange(image, np.array([int(self.lower_bound)]), np.array([int(self.upper_bound)]))
         return tresholded

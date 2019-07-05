@@ -33,7 +33,6 @@ class CaptchaDecoder:
         path = os.path.join(MODEL_DIRECTORY, self.classificator.task_id)
         cnn.load_state_dict(torch.load(path))
         characters = np.array(characters)
-        print(characters.shape)
         characters = torch.from_numpy((characters.astype(dtype=np.float32) / 255).reshape([self.dataset.characters_per_image, 1, 20, 20]))
         data = Variable(characters)
         cnn.eval()

@@ -29,12 +29,10 @@ class DatasetExtractor:
                 continue
             name = self.labels[item.filename] if self.labels else basename(item.filename).split(".")[0]
             if len(name) != self.count:
-                print("Invalid name length")
                 raise Exception(
                     "Length of label `{0}` ({1}) does not match count of characters in CAPTCHA ({2}).".format(name,
                                                                                                               len(name),
                                                                                                               self.count))
-            print(name, i)
             image_data = {}
             char_dict = []
             image_data["name"] = name
