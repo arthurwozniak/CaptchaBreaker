@@ -7,7 +7,7 @@
 amqp==2.4.1
 babel==2.6.0
 billiard==3.5.0.5
-celery==4.2.1
+celery==5.2.2
 click==7.0
 flask-simplelogin==0.0.6
 flask-sqlalchemy==2.3.2
